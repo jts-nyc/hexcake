@@ -33,10 +33,12 @@ button:focus-visible{outline:3px solid var(--rose-deep);outline-offset:2px}
 .order{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;align-items:stretch}
 .order .row{display:flex;justify-content:space-between;gap:6px;white-space:nowrap;font-size:12px;font-weight:700;color:var(--ink-2)}
 .order .row strong{color:var(--ink);font-variant-numeric:tabular-nums;font-size:14px}
-.bar{height:10px;border-radius:6px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--line);overflow:hidden;position:relative}
-.bar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--rose),#f3a76b);border-radius:6px;transition:width .35s}
+.bar{height:12px;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--line),inset 0 2px 3px rgba(120,70,90,.12);overflow:hidden;position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;width:0;border-radius:8px;transition:width .45s cubic-bezier(.3,1.4,.5,1);
+  background:repeating-linear-gradient(115deg,rgba(255,255,255,.28) 0 7px,transparent 7px 14px),linear-gradient(90deg,var(--rose),#f3a76b);
+  box-shadow:inset 0 -2px 0 rgba(150,60,80,.18),inset 0 2px 0 rgba(255,255,255,.35)}
 .bar em{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.35}
-.icon{width:44px;height:44px;border-radius:14px;border:0;background:var(--panel);display:grid;place-items:center;
+.icon{width:44px;height:44px;border-radius:50%;border:0;background:linear-gradient(#fffdfb,#fbeee6);display:grid;place-items:center;transition:transform .12s;
   box-shadow:0 2px 0 var(--line),0 0 0 1.5px var(--line) inset}
 .icon:active{transform:translateY(1px)}
 .icon:disabled{opacity:.4}
@@ -110,6 +112,24 @@ button:focus-visible{outline:3px solid var(--rose-deep);outline-offset:2px}
 .coderow button{min-height:44px;padding:0 16px;border-radius:12px;border:0;background:var(--ink);color:#fff;font-weight:800}
 ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;line-height:1.4}
 .big{font-family:var(--f-display);font-size:40px;line-height:1;color:var(--rose-deep)}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(ellipse at 50% 46%,transparent 58%,rgba(120,70,90,.17) 100%)}
+.toast{z-index:17}
+.cnt{display:inline-flex;align-items:center;gap:5px}
+.bx{display:inline-grid;width:20px;height:20px;flex:0 0 auto}
+.bx svg{width:100%;height:100%}
+.cnt:has(.bumpy) .bx{animation:bumpy .38s ease-out}
+.boxes{display:flex;flex-wrap:wrap;gap:5px}
+.boxes .bx{width:26px;height:26px;animation:boxin .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes boxin{from{transform:translateY(-14px) scale(.3)}}
+@media (prefers-reduced-motion: reduce){ .boxes .bx{animation:none} }
+#cakeCount{display:inline-block}
+@keyframes bumpy{35%{transform:scale(1.4);color:var(--rose-deep)}}
+.bumpy{animation:bumpy .38s ease-out}
+.pw{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.pw li{padding:8px 10px;border-radius:12px;background:#fff;box-shadow:0 0 0 1.5px var(--line) inset;line-height:1.35;font-size:13px;color:var(--ink-2)}
+.pw li b{display:block;font-size:14px;color:var(--ink)}
+@media (prefers-reduced-motion: reduce){ .bumpy{animation:none} }
 .loading{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;color:var(--ink-2);pointer-events:none}
 @media (prefers-reduced-motion: reduce){ .celeb .cb{transition:none;transform:none} .celeb i{display:none} }
 @media (prefers-reduced-motion: reduce){ .bar i,.toast{transition:none} .icon.nudge{animation:none;box-shadow:0 2px 0 var(--line),0 0 0 3px rgba(240,160,32,.9)} }
@@ -119,7 +139,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
   <div class="hud">
     <div class="lvl"><b id="lvlName">Level 1</b><span id="lvlCode">1-L1</span></div>
     <div class="order" aria-live="polite">
-      <div class="row"><span id="orderLabel">Order</span><strong id="cakeCount">0 / 0</strong></div>
+      <div class="row"><span id="orderLabel">Order</span><span class="cnt"><span class="bx" id="boxIco"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="9.5" width="18" height="11.5" rx="2" fill="#ee97ad"/><rect x="2" y="6" width="20" height="5" rx="1.5" fill="#f8c3d0" stroke="#d6718b"/><rect x="10.5" y="6" width="3" height="15" fill="#c4506d"/><path d="M12 6c-2-4.2-6.2-3-5-1s3 1 5 1zm0 0c2-4.2 6.2-3 5-1s-3 1-5 1z" fill="#c4506d"/></svg></span><strong id="cakeCount">0 / 0</strong></span></div>
       <div class="bar" title="The mark shows the order size"><i id="barFill"></i><em id="barMark"></em></div>
     </div>
     <button class="icon" id="undoBtn" aria-label="Undo">
@@ -144,8 +164,15 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
   <svg class="spot" id="spot" aria-hidden="true"></svg>
   <div class="veil" id="menu" hidden>
     <div class="card" role="dialog" aria-label="Levels">
-      <h2>Sweet Sixths <small style="font:700 12px var(--f-body);color:var(--ink-2);letter-spacing:.06em">v0.1</small></h2>
+      <h2>Sweet Sixths <small style="font:700 12px var(--f-body);color:var(--ink-2);letter-spacing:.06em">v0.2</small></h2>
       <p class="muted">Drag a plate from the counter onto the board. Matching slices slide together, and six of one flavor make a cake that goes in a box.</p>
+      <h3>Powerups</h3>
+      <p class="muted">A powerup lands on an empty tile and waits there. Play a plate onto it to set it off. It works on the flavor that plate has most of.</p>
+      <ul class="pw">
+        <li><b>Whisk</b>Earned by boxing two cakes with one plate. Sweeps that flavor in from the whole row and column.</li>
+        <li><b>Mixing bowl</b>Earned by boxing three, or two with a whisk. Sorts every plate around it by flavor.</li>
+        <li><b>Rainbow cake</b>Earned by emptying the board, or by a big mixing-bowl play. Calls that flavor in from everywhere.</li>
+      </ul>
       <h3>Limited plates</h3>
       <p class="muted">Fill the order before the plates run out.</p>
       <div class="grid" id="levelGrid"></div>
@@ -166,11 +193,11 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
       <p class="muted">To bring progress over, paste a save code in the Level code box above. A numbered level's code, shown under its name (like 8-L22), also works: it opens every level up to that one.</p>
       <h3>How it's fair</h3>
       <ul class="rules">
-        <li>Every plate in the level is decided before you move, from the level code. Nothing reacts to how you play.</li>
+        <li>Every plate in the level is decided before you move, from the level code. Powerups are the only thing that depends on how you play, and they only ever help.</li>
         <li>Each flavor comes in whole cakes, and every level is played through by a solver before you see it.</li>
         <li>The next three plates are always shown. Undo and hints are free, and there are no ads, coins, lives or timers.</li>
       </ul>
-      <div class="btns"><button class="btn alt" id="soundBtn">Sound: on</button><button class="btn" id="closeMenu">Back to the board</button></div>
+      <div class="btns"><button class="btn alt" id="paceBtn">Motion: animated</button><button class="btn alt" id="soundBtn">Sound: on</button><button class="btn" id="closeMenu">Back to the board</button></div>
     </div>
   </div>
 
@@ -178,6 +205,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
     <div class="card" role="dialog" aria-label="Level result">
       <h2 id="endTitle">Order filled</h2>
       <div class="big" id="endBig">16 / 16</div>
+      <div class="boxes" id="endBoxes" hidden></div>
       <p id="endText"></p>
       <div class="btns" id="endBtns"></div>
     </div>
@@ -269,9 +297,10 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
   // Settles the board after a plate lands on `start`. Slices of one flavor gather onto the
   // neighboring plate that already holds the most of it. Every move strictly raises the sum of
   // squared counts, so the loop always ends. Returns cakes completed; pushes events into ev.
-  function resolve(b, F, nb, start, ev) {
+  function resolve(b, F, nb, start, ev, boxed) {
     let cakes = 0;
-    const q = [start], inq = new Uint8Array(nb.length); inq[start] = 1;
+    const q = Array.isArray(start) ? start.slice() : [start], inq = new Uint8Array(nb.length);
+    for (const x of q) inq[x] = 1;
     const push = (x) => { if (!inq[x]) { inq[x] = 1; q.push(x); } };
     while (q.length) {
       const c = q.shift(); inq[c] = 0;
@@ -313,6 +342,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
           if (moved) {
             if (b[best * F + f] === CAP) {
               b[best * F + f] = 0; cakes++;
+              if (boxed) boxed.push(best);
               if (ev) ev.push({ t: 'c', c: best, f });
             } else push(best);
             again = true;
@@ -329,7 +359,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
               b[y * F + f] -= k; b[x * F + f] += k; b[x * F + g] -= k; b[y * F + g] += k;
               if (ev) { ev.push({ t: 'm', from: y, to: x, f, k }); ev.push({ t: 'm', from: x, to: y, f: g, k }); }
               for (const [p, h] of [[x, f], [y, g]]) {
-                if (b[p * F + h] === CAP) { b[p * F + h] = 0; cakes++; if (ev) ev.push({ t: 'c', c: p, f: h }); }
+                if (b[p * F + h] === CAP) { b[p * F + h] = 0; cakes++; if (boxed) boxed.push(p); if (ev) ev.push({ t: 'c', c: p, f: h }); }
               }
               if (tot(b, F, x)) push(x);
               if (tot(b, F, y)) push(y);
@@ -361,6 +391,65 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
       }
     }
     return mv;
+  }
+
+  // ---------- powerups ----------
+  // A token sits on an empty tile and fires when a plate is played onto it, using the flavor
+  // that plate has most of. Whisk: that flavor from the whole row and column. Mixing bowl: every
+  // plate in the 3x3 around it is sorted by flavor. Rainbow cake: that flavor from the whole
+  // board. No slice is ever destroyed, only boxed in sixes or moved, so every level stays fair.
+  const PW_WHISK = 1, PW_MIXER = 2, PW_RAINBOW = 3;
+  function mainFlavor(counts, F, off) {
+    let bf = -1, bk = 0; off = off || 0;
+    for (let f = 0; f < F; f++) if (counts[off + f] > bk) { bk = counts[off + f]; bf = f; }
+    return bf;
+  }
+  // the other tiles a powerup on `cell` reaches, nearest first
+  function powerCells(level, type, cell) {
+    const cols = level.cols, rows = level.rows, x = cell % cols, y = (cell / cols) | 0, out = [];
+    for (let c = 0; c < cols * rows; c++) {
+      if (c === cell || level.blocked[c]) continue;
+      const cx = c % cols, cy = (c / cols) | 0;
+      if (type === PW_WHISK ? (cx === x || cy === y) : type === PW_MIXER ? (Math.abs(cx - x) <= 1 && Math.abs(cy - y) <= 1) : true) out.push(c);
+    }
+    const d = (c) => Math.abs(c % cols - x) + Math.abs(((c / cols) | 0) - y);
+    return out.sort((a, z) => d(a) - d(z) || a - z);
+  }
+  function firePower(level, s, type, cell, ev) {
+    const F = level.F, b = s.b, f0 = mainFlavor(b, F, cell * F);
+    const area = [cell].concat(powerCells(level, type, cell).filter((c) => tot(b, F, c) > 0));
+    const flavors = type === PW_MIXER ? [...Array(F).keys()] : (f0 >= 0 ? [f0] : []);
+    const cakes = [];
+    let made = 0;
+    // box every full six of each flavor, taking slices from the farthest plates first
+    for (const f of flavors) {
+      let sum = 0; for (const c of area) sum += b[c * F + f];
+      let need = Math.floor(sum / CAP) * CAP;
+      if (need) { cakes.push({ f, n: need / CAP }); made += need / CAP; }
+      for (let i = area.length - 1; i >= 0 && need > 0; i--) { const c = area[i], k = Math.min(need, b[c * F + f]); b[c * F + f] -= k; need -= k; }
+    }
+    if (type === PW_MIXER) {
+      // what is left goes back one flavor to a plate, biggest group nearest the middle
+      const rem = [];
+      for (const f of flavors) { let n = 0; for (const c of area) n += b[c * F + f]; if (n) rem.push([f, n]); }
+      rem.sort((a, z) => z[1] - a[1] || a[0] - z[0]);
+      for (const c of area) for (let f = 0; f < F; f++) b[c * F + f] = 0;
+      const room = area.map(() => CAP);
+      for (const [f, n0] of rem) {
+        let n = n0, i = room.indexOf(CAP);
+        if (i < 0) { let br = -1; room.forEach((r, j) => { if (r >= n && r > br) { br = r; i = j; } }); }
+        if (i >= 0) { b[area[i] * F + f] += n; room[i] -= n; continue; }
+        for (i = 0; i < area.length && n > 0; i++) { const k = Math.min(n, room[i]); if (k) { b[area[i] * F + f] += k; room[i] -= k; n -= k; } }
+      }
+    } else if (f0 >= 0) {
+      // the leftover slices of the flavor come to the played plate while it has room
+      for (let i = 1; i < area.length; i++) {
+        const c = area[i], k = Math.min(CAP - tot(b, F, cell), b[c * F + f0]);
+        if (k > 0) { b[c * F + f0] -= k; b[cell * F + f0] += k; }
+      }
+    }
+    if (ev) ev.push({ t: 'pw', type, c: cell, f: f0, cakes, layout: area.map((c) => [c, Array.from(b.slice(c * F, c * F + F))]) });
+    return { made, area };
   }
 
   // ---------- generator ----------
@@ -488,9 +577,10 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
       next: Math.min(BATCH, level.queue.length),
       cakes: 0,
       pts: 0,
+      pw: new Int8Array(level.cols * level.rows),   // powerup token on each tile, 0 for none
     };
   }
-  function cloneState(s) { return { b: s.b.slice(), tray: s.tray.slice(), next: s.next, cakes: s.cakes, pts: s.pts || 0 }; }
+  function cloneState(s) { return { b: s.b.slice(), tray: s.tray.slice(), next: s.next, cakes: s.cakes, pts: s.pts || 0, pw: s.pw ? s.pw.slice() : null }; }
   // Points: each cake boxed by one plate is worth 100 more than the one before it
   // (1 cake 100, 2 cakes 300, 3 cakes 600), and clearing the whole board adds 200.
   const CLEAN_BONUS = 200;
@@ -505,13 +595,40 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
   function place(level, s, qi, cell, wantEvents) {
     const F = level.F, p = level.queue[qi];
     for (let f = 0; f < F; f++) s.b[cell * F + f] = p[f];
-    const ev = wantEvents ? [] : null;
-    const made = resolve(s.b, F, level.nb, cell, ev);
+    const ev = wantEvents ? [] : null, boxed = [];
+    let made = 0, starts = cell;
+    const type = s.pw ? s.pw[cell] : 0;
+    if (type) {
+      s.pw[cell] = 0;
+      const r = firePower(level, s, type, cell, ev);
+      made += r.made; starts = r.area;
+    }
+    made += resolve(s.b, F, level.nb, starts, ev, boxed);
     s.cakes += made;
     if (made) {
       const clean = boardEmpty(level, s);
       s.pts = (s.pts || 0) + platePoints(made) + (clean ? CLEAN_BONUS : 0);
       if (ev) ev.push({ t: 'p', made, clean, pts: platePoints(made) + (clean ? CLEAN_BONUS : 0) });
+      // Powerups are earned by what one plate did: two cakes a whisk, three or more a mixing
+      // bowl, an emptied board a rainbow cake. A plate that set off a powerup earns one step
+      // better, so a whisk that boxes two leaves a mixing bowl, and a mixing bowl a rainbow cake.
+      // The token lands on a tile a cake just left.
+      if (s.pw) {
+        const want = [];
+        let tier = made >= 3 ? PW_MIXER : made === 2 ? PW_WHISK : 0;
+        if (tier && type) tier = Math.min(PW_RAINBOW, tier + 1);
+        if (clean) want.push(PW_RAINBOW);
+        if (tier && !(clean && tier === PW_RAINBOW)) want.push(tier);
+        const spots = boxed.slice().reverse().concat([cell]);
+        const open = (x) => !level.blocked[x] && !s.pw[x] && tot(s.b, F, x) === 0;
+        for (const tp of want) {
+          let c = spots.find(open);
+          if (c === undefined) c = powerCells(level, PW_RAINBOW, cell).find(open);
+          if (c === undefined) break;
+          s.pw[c] = tp;
+          if (ev) ev.push({ t: 't', c, type: tp });
+        }
+      }
     }
     s.tray = s.tray.filter((x) => x !== qi);
     if (!s.tray.length && level.endless) { level.dealt = s.next; extendEndless(level, s.cakes); }
@@ -547,7 +664,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
     else if (empties === 1) v -= 60;
     return v;
   }
-  function key(s) { return s.b.join('') + '|' + s.tray.join(',') + '|' + s.next; }
+  function key(s) { return s.b.join('') + '|' + s.tray.join(',') + '|' + s.next + (s.pw ? '|' + s.pw.join('') : ''); }
 
   function solve(level, start, opts) {
     const width = opts.width || 48, goal = opts.goal || level.totalCakes;
@@ -618,7 +735,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
 
   const api = {
     CAP, COLS, ROWS, BATCH, NFLAVORS, TIERS, makeRng, parseCode, neighbors, tot, resolve,
-    rawLevel, makeLevel, makeEndless, solvePoints, platePoints, CLEAN_BONUS, endlessFlavors, CAKES_PER_FLAVOR, initialState, cloneState, emptyCells, place, isOver, solve, casual,
+    rawLevel, makeLevel, makeEndless, solvePoints, platePoints, CLEAN_BONUS, endlessFlavors, CAKES_PER_FLAVOR, initialState, cloneState, emptyCells, place, isOver, solve, casual, mainFlavor, powerCells, PW_WHISK, PW_MIXER, PW_RAINBOW,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Sixths = api;
@@ -628,7 +745,9 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
 (function () {
 'use strict';
 const E = window.Sixths;
-const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Motion follows the device's Reduce Motion setting until the player picks one in the menu.
+const sysReduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+let reduceMotion = sysReduce;
 let SPEED = reduceMotion ? 0.35 : 1;
 
 // ---------- storage ----------
@@ -639,7 +758,7 @@ let SPEED = reduceMotion ? 0.35 : 1;
 // and the in-progress board from whichever copy was written last.
 const SKEY = 'sweet-sixths-v1';
 const CAMPAIGN = 30;
-const BLANK = () => ({ unlocked: 1, stars: {}, sound: true, current: null, endlessBest: 0, endlessBest45: 0, endlessBest34: 0, endlessPrev: 0, endlessSize: '46', hintSeen: false, sUnlocked: 1, sStars: {}, ach: {}, updatedAt: 0 });
+const BLANK = () => ({ unlocked: 1, stars: {}, sound: true, current: null, endlessBest: 0, endlessBest45: 0, endlessBest34: 0, endlessPrev: 0, endlessSize: '46', hintSeen: false, reduce: null, sUnlocked: 1, sStars: {}, ach: {}, updatedAt: 0 });
 const SCORE_N = 15;
 const ACH = [
   ['c10', 'Warm oven', '10 cakes in one Endless run'],
@@ -686,12 +805,17 @@ function mergeSaves(a, b) {
   out.endlessPrev = num(newer.endlessPrev, 0);
   out.hintSeen = !!(a.hintSeen || b.hintSeen);
   out.sound = newer.sound !== false;
+  out.reduce = newer.reduce === true || newer.reduce === false ? newer.reduce : null;
   const cur = newer.current;
   out.current = cur && typeof cur.code === 'string' && Array.isArray(cur.moves) ? { code: cur.code, n: cur.n || null, moves: cur.moves } : null;
   out.updatedAt = Math.max(ta, tb);
   return out;
 }
 try { const raw = localStorage.getItem(SKEY); if (raw) save = mergeSaves(save, JSON.parse(raw)); } catch (e) {}
+function applyPace() { reduceMotion = save.reduce == null ? sysReduce : !!save.reduce; SPEED = reduceMotion ? 0.35 : 1; }
+const motionLabel = () => 'Motion: ' + (reduceMotion ? 'reduced' : 'animated');
+applyPace();
+
 
 const idbOpen = (() => {
   let p = null;
@@ -771,7 +895,7 @@ async function syncSaves(onChange) {
     }
   } catch (e) { cloud = null; }
   const changed = JSON.stringify(prev) !== JSON.stringify(save);
-  synced = true;
+  synced = true; applyPace();
   persist();
   if (cloud) pushCloud();
   showSaveWhere();
@@ -841,12 +965,35 @@ const stage = document.getElementById('stage');
 const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'default' });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 stage.prepend(renderer.domElement);
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xe9ddd4).convertSRGBToLinear();
+scene.background = new THREE.Color(0xeadfd3).convertSRGBToLinear();
 const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-scene.add(new THREE.HemisphereLight(0xffffff, 0xcdb7a8, 0.5));
-const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(-5, 8, 4); scene.add(sun);
+scene.add(new THREE.HemisphereLight(0xfff7ee, 0xd9b9a6, 0.16));
+// one warm key light from the upper left, with soft shadows over the board and the counter
+const sun = new THREE.DirectionalLight(0xfff0dc, 0.58); sun.position.set(-4.5, 10, 2.5); sun.target.position.set(0, 0, 2.2);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8, near: 1, far: 26 });
+sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.025;
+scene.add(sun); scene.add(sun.target);
+// what the glazes and the porcelain reflect: a warm room with a few soft windows, drawn once
+scene.environment = (() => {
+  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 256;
+  const x = cv.getContext('2d'), g = x.createLinearGradient(0, 0, 0, 256);
+  g.addColorStop(0, '#fff8ef'); g.addColorStop(0.42, '#f4dece'); g.addColorStop(0.56, '#dcbba9'); g.addColorStop(1, '#a98674');
+  x.fillStyle = g; x.fillRect(0, 0, 512, 256);
+  [[90, 62, 70], [250, 40, 90], [400, 70, 60], [330, 110, 40]].forEach(([cx, cy, r]) => {
+    const w = x.createRadialGradient(cx, cy, 0, cx, cy, r);
+    w.addColorStop(0, 'rgba(255,255,255,1)'); w.addColorStop(0.5, 'rgba(255,252,244,0.75)'); w.addColorStop(1, 'rgba(255,250,240,0)');
+    x.fillStyle = w; x.fillRect(cx - r, cy - r, r * 2, r * 2);
+  });
+  const tex = new THREE.CanvasTexture(cv); tex.mapping = THREE.EquirectangularReflectionMapping; tex.encoding = THREE.sRGBEncoding;
+  const pm = new THREE.PMREMGenerator(renderer), env = pm.fromEquirectangular(tex).texture;
+  tex.dispose(); pm.dispose();
+  return env;
+})();
 
 const CS = 1.3;                          // cell size
 // The board's front edge stays put by the counter; smaller boards (early levels) grow toward the back.
@@ -882,9 +1029,11 @@ function merge(parts) {
   g.computeBoundingSphere();
   return g;
 }
-const vmat = new THREE.MeshLambertMaterial({ vertexColors: true });
-const cakeMat = new THREE.MeshPhongMaterial({ vertexColors: true, shininess: 38, specular: 0x2c2826 });
-const plateMat = new THREE.MeshPhongMaterial({ vertexColors: true, shininess: 110, specular: 0x9aa4ad });
+const vmat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.62, envMapIntensity: 0.42 });               // card, wood, matte things
+const cakeMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.46, envMapIntensity: 0.48 });             // sponge, frosting, glaze
+const plateMat = new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.08, envMapIntensity: 0.5 });   // porcelain
+const enamelMat = new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: 0.38, clearcoat: 0.7, clearcoatRoughness: 0.25, envMapIntensity: 0.38 }); // the tray
+const brassMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.28, metalness: 1, envMapIntensity: 1.25 });
 
 // one wedge = one sixth of a cake, built around the plate's center, spanning 0..60 degrees
 function wedge(r, y0, h) {
@@ -1021,17 +1170,16 @@ const sliceGeo = DESSERTS.map((build) => merge(build()));
 sliceGeo.forEach((g) => g.translate(0, PLATE_TOP - 0.0, 0));
 
 const plateGeo = merge([
-  part(new THREE.CylinderGeometry(0.6, 0.48, 0.07, 32), 0xcfe3ee).translate(0, 0.035, 0),
-  part(new THREE.CylinderGeometry(0.5, 0.5, 0.02, 32), 0xf3f9fc).translate(0, 0.072, 0),
-  part(new THREE.TorusGeometry(0.585, 0.022, 6, 32).rotateX(Math.PI / 2), 0xeaf6fc).translate(0, 0.075, 0),
-  // a glint on the rim, like light on glass
-  part(new THREE.TorusGeometry(0.585, 0.026, 6, 10, 1.1).rotateX(Math.PI / 2).rotateY(1.7), 0xffffff).translate(0, 0.082, 0),
+  part(new THREE.CylinderGeometry(0.6, 0.46, 0.07, 40), 0xf3eee8).translate(0, 0.035, 0),
+  part(new THREE.CylinderGeometry(0.5, 0.5, 0.02, 40), 0xfffdf9).translate(0, 0.072, 0),
+  part(new THREE.TorusGeometry(0.575, 0.026, 8, 40).rotateX(Math.PI / 2), 0xfffdf9).translate(0, 0.074, 0),
+  part(new THREE.TorusGeometry(0.5, 0.012, 6, 40).rotateX(Math.PI / 2), 0xd9b05c).translate(0, 0.083, 0),
 ]);
 // soft contact shadow under every plate (one shared quad and texture)
 const shadowTex = (() => {
   const cv = document.createElement('canvas'); cv.width = cv.height = 64;
   const x = cv.getContext('2d'), g = x.createRadialGradient(32, 32, 10, 32, 32, 32);
-  g.addColorStop(0, 'rgba(60,30,45,0.42)'); g.addColorStop(0.6, 'rgba(60,30,45,0.16)'); g.addColorStop(1, 'rgba(60,30,45,0)');
+  g.addColorStop(0, 'rgba(50,30,40,0.26)'); g.addColorStop(0.6, 'rgba(50,30,40,0.09)'); g.addColorStop(1, 'rgba(60,30,45,0)');
   x.fillStyle = g; x.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(cv);
 })();
 const plateShadowGeo = new THREE.PlaneGeometry(1.55, 1.55).rotateX(-Math.PI / 2);
@@ -1048,63 +1196,121 @@ function roundRect(w, d, r, h, color, y) {
   g.rotateX(Math.PI / 2); g.translate(0, y, 0);
   return part(g, color);
 }
-let boardMesh = null;
+// A rounded tube that follows the tray's edge.
+function rimTube(w, d, r, y, z, rad) {
+  const pts = [], N = 8;
+  const corner = (cx, cz, a0) => { for (let k = 0; k <= N; k++) { const a = a0 + k / N * Math.PI / 2; pts.push(new THREE.Vector3(cx + Math.cos(a) * r, y, cz + Math.sin(a) * r + z)); } };
+  corner(w / 2 - r, d / 2 - r, 0); corner(-w / 2 + r, d / 2 - r, Math.PI / 2); corner(-w / 2 + r, -d / 2 + r, Math.PI); corner(w / 2 - r, -d / 2 + r, Math.PI * 1.5);
+  return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true, 'catmullrom', 0.02), 200, rad, 8, true);
+}
+const MACARON = [0xf4a9c0, 0xb9dca0, 0xc9b3ee, 0xf7dc82, 0xf6b98a];
+let boardGroup = null;
 function buildBoard(level) {
-  if (boardMesh) { scene.remove(boardMesh); boardMesh.geometry.dispose(); }
-  const parts = [
-    roundRect(boardW(), boardD(), 0.45, 0.32, 0xe48aa0, 0.0).translate(0, -0.02, boardZ()),
-    roundRect(boardW() - 0.3, boardD() - 0.3, 0.35, 0.02, 0xd27089, 0.0).translate(0, 0.001, boardZ()),
-    // the curved wooden counter that holds incoming plates
-    part(new THREE.CylinderGeometry(COUNTER_R + 0.98, COUNTER_R + 0.98, 0.26, 48, 1, false, Math.PI * 0.72, Math.PI * 0.56), 0xb07a45).translate(0, -0.2, COUNTER_Z),
-    part(new THREE.CylinderGeometry(COUNTER_R + 0.9, COUNTER_R + 0.9, 0.3, 48, 1, false, Math.PI * 0.72, Math.PI * 0.56), 0xd9a066).translate(0, -0.18, COUNTER_Z),
-    part(new THREE.CylinderGeometry(COUNTER_R - 0.8, COUNTER_R - 0.8, 0.32, 48, 1, false, Math.PI * 0.72, Math.PI * 0.56), 0xfff1dc).translate(0, -0.17, COUNTER_Z),
+  if (boardGroup) { scene.remove(boardGroup); boardGroup.children.forEach((m) => m.geometry.dispose()); }
+  boardGroup = new THREE.Group();
+  const W = boardW(), D = boardD(), z = boardZ();
+  // mint enamel tray with a brass edge; each open tile is a paler well
+  const enamel = [
+    roundRect(W, D, 0.5, 0.3, 0x6db3a3, 0.0).translate(0, -0.02, z),
+    roundRect(W - 0.26, D - 0.26, 0.4, 0.02, 0x7cbdae, 0.0).translate(0, 0.0, z),
   ];
+  const brass = [part(rimTube(W - 0.04, D - 0.04, 0.48, -0.02, z, 0.06), 0xe3bb6a), part(rimTube(W + 0.02, D + 0.02, 0.51, -0.3, z, 0.05), 0xd2a654)];
+  const treats = [];
   for (let c = 0; c < level.cols * level.rows; c++) {
     const p = cellPos(c);
     if (level.blocked[c]) {
-      // closed spot: a sugar-flower stud instead of a slot
-      parts.push(part(new THREE.CylinderGeometry(0.16, 0.2, 0.08, 6), 0xfbe3ea).translate(p.x, 0.04, p.z));
+      // closed tile: a macaron sits on it
+      const col = MACARON[(c * 7 + level.cols) % MACARON.length];
+      enamel.push(part(new THREE.CylinderGeometry(0.42, 0.42, 0.02, 28), 0xfbf4e8).translate(p.x, 0.005, p.z));
+      treats.push(part(new THREE.SphereGeometry(0.31, 20, 10).scale(1, 0.4, 1), col).translate(p.x, 0.13, p.z));
+      treats.push(part(new THREE.CylinderGeometry(0.28, 0.28, 0.07, 20), 0xfffaf2).translate(p.x, 0.215, p.z));
+      treats.push(part(new THREE.SphereGeometry(0.31, 20, 10).scale(1, 0.4, 1), col).translate(p.x, 0.3, p.z));
     } else {
-      parts.push(part(new THREE.CylinderGeometry(0.6, 0.6, 0.02, 28), 0xb9506c).translate(p.x, 0.0, p.z));
-      parts.push(part(new THREE.TorusGeometry(0.6, 0.035, 4, 28).rotateX(Math.PI / 2), 0xf3a9bb).translate(p.x, 0.01, p.z));
+      enamel.push(part(new THREE.CylinderGeometry(0.6, 0.6, 0.02, 36), 0xb2dacf).translate(p.x, 0.003, p.z));
+      enamel.push(part(new THREE.TorusGeometry(0.6, 0.03, 6, 36).rotateX(Math.PI / 2), 0x58998b).translate(p.x, 0.008, p.z));
     }
   }
-  boardMesh = new THREE.Mesh(merge(parts), vmat);
-  scene.add(boardMesh);
+  [[enamel, enamelMat], [brass, brassMat], [treats, cakeMat]].forEach(([parts, mat]) => {
+    if (!parts.length) return;
+    const m = new THREE.Mesh(merge(parts), mat); m.receiveShadow = true; m.castShadow = true; boardGroup.add(m);
+  });
+  scene.add(boardGroup);
 }
-// the bakery counter: pale marble tiles with soft veins, drawn once into a small texture
+// the curved maple board that holds incoming plates, with a brass inlay line
 (function () {
-  const N = 512, cv = document.createElement('canvas'); cv.width = cv.height = N;
-  const x = cv.getContext('2d');
-  x.fillStyle = '#f5ede6'; x.fillRect(0, 0, N, N);
-  let seed = 4242; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  // faint warm blotches
-  for (let i = 0; i < 14; i++) {
-    const cx = rnd() * N, cy = rnd() * N, r = 60 + rnd() * 120, g = x.createRadialGradient(cx, cy, 0, cx, cy, r);
-    g.addColorStop(0, 'rgba(232,214,206,0.55)'); g.addColorStop(1, 'rgba(232,214,206,0)');
-    x.fillStyle = g; x.fillRect(0, 0, N, N);
-  }
-  // veins
-  for (let i = 0; i < 9; i++) {
-    x.strokeStyle = `rgba(160,138,148,${0.07 + rnd() * 0.1})`; x.lineWidth = 0.8 + rnd() * 1.8;
-    x.beginPath(); let px = rnd() * N, py = -20; x.moveTo(px, py);
-    while (py < N + 20) { const nx = px + (rnd() - 0.5) * 90, ny = py + 30 + rnd() * 50; x.quadraticCurveTo(px + (rnd() - 0.5) * 60, (py + ny) / 2, nx, ny); px = nx; py = ny; }
+  const cv = document.createElement('canvas'); cv.width = cv.height = 512;
+  const x = cv.getContext('2d'), g = x.createLinearGradient(0, 0, 512, 0);
+  g.addColorStop(0, '#d2a276'); g.addColorStop(0.5, '#dcae82'); g.addColorStop(1, '#cf9d70');
+  x.fillStyle = g; x.fillRect(0, 0, 512, 512);
+  let seed = 977; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 90; i++) {
+    const y0 = rnd() * 512, dark = rnd() < 0.5;
+    x.strokeStyle = dark ? `rgba(128,82,48,${0.05 + rnd() * 0.1})` : `rgba(255,236,206,${0.06 + rnd() * 0.1})`; x.lineWidth = 0.6 + rnd() * 2.6;
+    x.beginPath(); x.moveTo(-10, y0);
+    for (let px = 0; px <= 522; px += 58) x.lineTo(px, y0 + Math.sin(px * 0.011 + i) * 5 + (rnd() - 0.5) * 3);
     x.stroke();
   }
-  // tile joints
-  x.strokeStyle = 'rgba(205,186,176,0.9)'; x.lineWidth = 3;
-  for (let k = 0; k <= N; k += N / 2) { x.beginPath(); x.moveTo(k, 0); x.lineTo(k, N); x.stroke(); x.beginPath(); x.moveTo(0, k); x.lineTo(N, k); x.stroke(); }
+  const tex = new THREE.CanvasTexture(cv); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(2, 5); tex.encoding = THREE.sRGBEncoding;
+  tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+  const arc = [Math.PI * 0.72, Math.PI * 0.56];
+  const top = new THREE.Mesh(new THREE.CylinderGeometry(COUNTER_R + 0.9, COUNTER_R + 0.9, 0.3, 96, 1, false, arc[0], arc[1]), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.5, envMapIntensity: 0.4 }));
+  top.position.set(0, -0.18, COUNTER_Z); top.receiveShadow = true; top.castShadow = true; scene.add(top);
+  const edge = new THREE.Mesh(new THREE.CylinderGeometry(COUNTER_R + 0.98, COUNTER_R + 0.98, 0.26, 96, 1, false, arc[0], arc[1]), new THREE.MeshStandardMaterial({ color: new THREE.Color(0x9a6843).convertSRGBToLinear(), roughness: 0.6, envMapIntensity: 0.4 }));
+  edge.position.set(0, -0.2, COUNTER_Z); edge.castShadow = true; scene.add(edge);
+  const inlay = new THREE.Mesh(part(new THREE.TorusGeometry(COUNTER_R + 0.72, 0.022, 6, 96, arc[1]).rotateX(Math.PI / 2).rotateY(Math.PI / 2 + arc[1] / 2), 0xe3bb6a), brassMat);
+  inlay.position.set(0, -0.03, COUNTER_Z); scene.add(inlay);
+})();
+// the bakery counter: a pale marble slab with soft veins, drawn once into a texture
+(function () {
+  const N = 1024, cv = document.createElement('canvas'); cv.width = cv.height = N;
+  const x = cv.getContext('2d');
+  x.fillStyle = '#eadfd5'; x.fillRect(0, 0, N, N);
+  let seed = 4242; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  // clouds: warm and cool blotches, drawn wrapped so the texture tiles without a seam
+  const wrap = (fn) => { for (const dx of [-N, 0, N]) for (const dy of [-N, 0, N]) { x.save(); x.translate(dx, dy); fn(); x.restore(); } };
+  for (let i = 0; i < 26; i++) {
+    const cx = rnd() * N, cy = rnd() * N, r = 90 + rnd() * 220, warm = rnd() < 0.6;
+    wrap(() => {
+      const g = x.createRadialGradient(cx, cy, 0, cx, cy, r);
+      g.addColorStop(0, warm ? 'rgba(226,204,192,0.5)' : 'rgba(255,253,250,0.6)'); g.addColorStop(1, warm ? 'rgba(226,204,192,0)' : 'rgba(255,253,250,0)');
+      x.fillStyle = g; x.fillRect(cx - r, cy - r, r * 2, r * 2);
+    });
+  }
+  // veins: long wandering strokes, a few of them faintly gold, each with a soft halo
+  for (let i = 0; i < 6; i++) {
+    const gold = i % 3 === 0, w = 0.7 + rnd() * 1.6, pts = [];
+    let px = rnd() * N, py = -40; const drift = 0.7 + rnd() * 0.9;
+    while (py < N + 40) { pts.push([px, py]); px += drift * 60 + (rnd() - 0.5) * 150; py += 50 + rnd() * 90; }
+    wrap(() => {
+      for (const [lw, al] of [[w * 9, 0.03], [w, gold ? 0.26 : 0.13]]) {
+        x.strokeStyle = gold ? `rgba(196,160,104,${al})` : `rgba(150,128,136,${al})`; x.lineWidth = lw; x.lineCap = 'round';
+        x.beginPath(); x.moveTo(pts[0][0], pts[0][1]);
+        for (let k = 1; k < pts.length; k++) { const a = pts[k - 1], b = pts[k]; x.quadraticCurveTo(a[0], a[1], (a[0] + b[0]) / 2, (a[1] + b[1]) / 2); }
+        x.stroke();
+      }
+    });
+  }
   const tex = new THREE.CanvasTexture(cv);
-  tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(4, 4); tex.encoding = THREE.sRGBEncoding;
-  tex.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(36, 36), new THREE.MeshLambertMaterial({ map: tex }));
-  m.rotation.x = -Math.PI / 2; m.position.set(0, -0.4, 0); scene.add(m);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(3, 3); tex.encoding = THREE.sRGBEncoding;
+  tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(36, 36), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.34, envMapIntensity: 0.22 }));
+  m.rotation.x = -Math.PI / 2; m.position.set(0, -0.4, 0); m.receiveShadow = true; scene.add(m);
+  // window light lying across the counter: four warm panes, soft at the edges
+  const wc = document.createElement('canvas'); wc.width = wc.height = 256;
+  const y = wc.getContext('2d');
+  for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) {
+    const cx = 70 + i * 116, cy = 70 + j * 116, g = y.createRadialGradient(cx, cy, 8, cx, cy, 64);
+    g.addColorStop(0, 'rgba(255,238,205,0.85)'); g.addColorStop(0.7, 'rgba(255,238,205,0.5)'); g.addColorStop(1, 'rgba(255,238,205,0)');
+    y.fillStyle = g; y.fillRect(cx - 54, cy - 54, 108, 108);
+  }
+  const wl = new THREE.Mesh(new THREE.PlaneGeometry(11, 15), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(wc), transparent: true, opacity: 0.13, depthWrite: false, blending: THREE.AdditiveBlending }));
+  wl.rotation.x = -Math.PI / 2; wl.rotation.z = 0.5; wl.position.set(-3.2, -0.385, 0.6); wl.renderOrder = -2; scene.add(wl);
 })();
 // soft floor shadow under the tray (single textured quad)
 (function () {
   const cv = document.createElement('canvas'); cv.width = cv.height = 64;
   const x = cv.getContext('2d'), g = x.createRadialGradient(32, 32, 4, 32, 32, 32);
-  g.addColorStop(0, 'rgba(70,40,60,0.28)'); g.addColorStop(1, 'rgba(70,40,60,0)');
+  g.addColorStop(0, 'rgba(70,40,60,0.16)'); g.addColorStop(1, 'rgba(70,40,60,0)');
   x.fillStyle = g; x.fillRect(0, 0, 64, 64);
   const m = new THREE.Mesh(new THREE.PlaneGeometry(9, 12.5), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, depthWrite: false }));
   m.rotation.x = -Math.PI / 2; m.position.set(0.25, -0.36, 0.9); scene.add(m);
@@ -1125,42 +1331,115 @@ const glowTex = (() => {
   g.addColorStop(0, 'rgba(255,250,220,1)'); g.addColorStop(0.4, 'rgba(255,240,200,0.55)'); g.addColorStop(1, 'rgba(255,240,200,0)');
   x.fillStyle = g; x.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(cv);
 })();
-const CONFETTI = 28;
-const confetti = (() => {
+// small particles: confetti and landing crumbs. One Points object, stepped by the frame loop.
+const FXN = 240;
+const fx = (() => {
   const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(CONFETTI * 3), 3));
-  const col = new Float32Array(CONFETTI * 3), c = new THREE.Color();
-  for (let i = 0; i < CONFETTI; i++) { c.set(SPRINKLES[i % SPRINKLES.length]).convertSRGBToLinear(); col.set([c.r, c.g, c.b], i * 3); }
+  const pos = new Float32Array(FXN * 3).fill(-99), col = new Float32Array(FXN * 3);
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
-  const pts = new THREE.Points(geo, new THREE.PointsMaterial({ size: 0.2, vertexColors: true, transparent: true, depthWrite: false }));
-  pts.visible = false; pts.frustumCulled = false; scene.add(pts);
-  const vel = new Float32Array(CONFETTI * 3);
-  return { pts, vel };
+  const cv = document.createElement('canvas'); cv.width = cv.height = 32;
+  const x = cv.getContext('2d'); x.fillStyle = '#fff'; x.beginPath(); x.arc(16, 16, 14, 0, Math.PI * 2); x.fill();
+  const pts = new THREE.Points(geo, new THREE.PointsMaterial({ size: 0.17, vertexColors: true, map: new THREE.CanvasTexture(cv), alphaTest: 0.5 }));
+  pts.frustumCulled = false; scene.add(pts);
+  return { pos, col, vel: new Float32Array(FXN * 3), life: new Float32Array(FXN), next: 0, alive: 0, geo };
 })();
-function launchConfetti(at) {
-  const p = confetti.pts.geometry.attributes.position.array, v = confetti.vel;
-  for (let i = 0; i < CONFETTI; i++) {
-    const a = Math.random() * Math.PI * 2, sp = 0.6 + Math.random() * 1.2;
-    p.set([at.x, at.y, at.z], i * 3);
-    v.set([Math.cos(a) * sp, 2 + Math.random() * 1.8, Math.sin(a) * sp], i * 3);
+const fxColor = new THREE.Color();
+function emit(at, n, colors, spread, up) {
+  if (reduceMotion) return;
+  for (let k = 0; k < n; k++) {
+    const i = fx.next; fx.next = (fx.next + 1) % FXN;
+    const a = Math.random() * Math.PI * 2, sp = spread * (0.4 + Math.random() * 0.8);
+    fx.pos.set([at.x, at.y, at.z], i * 3);
+    fx.vel.set([Math.cos(a) * sp, up * (0.6 + Math.random() * 0.7), Math.sin(a) * sp], i * 3);
+    fxColor.set(colors[(Math.random() * colors.length) | 0]).convertSRGBToLinear();
+    fx.col.set([fxColor.r, fxColor.g, fxColor.b], i * 3);
+    fx.life[i] = 0.55 + Math.random() * 0.5;
   }
-  confetti.pts.geometry.attributes.position.needsUpdate = true;
-  confetti.pts.material.opacity = 1; confetti.pts.visible = true;
+  fx.geo.attributes.color.needsUpdate = true; fx.alive = 1; kick();
 }
-function stepConfetti(dt, fade) {
-  const p = confetti.pts.geometry.attributes.position.array, v = confetti.vel;
-  for (let i = 0; i < CONFETTI; i++) {
-    v[i * 3 + 1] -= 9 * dt;
-    p[i * 3] += v[i * 3] * dt; p[i * 3 + 1] += v[i * 3 + 1] * dt; p[i * 3 + 2] += v[i * 3 + 2] * dt;
+function stepFx(dt) {
+  if (!fx.alive) return;
+  let alive = 0;
+  for (let i = 0; i < FXN; i++) {
+    if (fx.life[i] <= 0) continue;
+    fx.life[i] -= dt;
+    const o = i * 3;
+    fx.vel[o + 1] -= 9 * dt;
+    fx.pos[o] += fx.vel[o] * dt; fx.pos[o + 1] += fx.vel[o + 1] * dt; fx.pos[o + 2] += fx.vel[o + 2] * dt;
+    if (fx.life[i] <= 0 || fx.pos[o + 1] < 0) { fx.life[i] = 0; fx.pos[o + 1] = -99; } else alive++;
   }
-  confetti.pts.geometry.attributes.position.needsUpdate = true;
-  confetti.pts.material.opacity = fade;
+  fx.geo.attributes.position.needsUpdate = true; fx.alive = alive;
 }
-const burstMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9, depthWrite: false });
+// a white ring that spreads from a spot and fades
 const burstGeo = new THREE.RingGeometry(0.45, 0.6, 28);
+function burst(at, color, size) {
+  if (reduceMotion) return;
+  const mat = new THREE.MeshBasicMaterial({ color: color || 0xffffff, transparent: true, opacity: 0.9, depthWrite: false });
+  const m = new THREE.Mesh(burstGeo, mat); m.rotation.x = -Math.PI / 2; m.position.set(at.x, 0.09, at.z); scene.add(m);
+  tween(380, (t) => { m.scale.setScalar(0.6 + t * (size || 1.6)); mat.opacity = 0.9 * (1 - t); }, easeOut, () => { scene.remove(m); mat.dispose(); });
+}
+// shadows that follow slices through the air
+const flyShadows = [];
+function takeShadow() { const sh = flyShadows.pop() || new THREE.Mesh(plateShadowGeo, plateShadowMat); sh.renderOrder = -1; scene.add(sh); return sh; }
+function giveShadow(sh) { scene.remove(sh); flyShadows.push(sh); }
+
+// the bakery box a finished cake goes into: open box, and a lid hinged along its back edge
+const BOX_H = 0.8;
+const boxGeo = merge([
+  part(new THREE.BoxGeometry(1.32, 0.04, 1.32), 0xf7c6d2).translate(0, 0.02, 0),
+  part(new THREE.BoxGeometry(1.32, BOX_H, 0.04), 0xfad9e1).translate(0, BOX_H / 2, 0.64),
+  part(new THREE.BoxGeometry(1.32, BOX_H, 0.04), 0xf0b1c1).translate(0, BOX_H / 2, -0.64),
+  part(new THREE.BoxGeometry(0.04, BOX_H, 1.32), 0xf5bfcd).translate(0.64, BOX_H / 2, 0),
+  part(new THREE.BoxGeometry(0.04, BOX_H, 1.32), 0xf5bfcd).translate(-0.64, BOX_H / 2, 0),
+]);
+const lidGeo = merge([part(new THREE.BoxGeometry(1.38, 0.05, 1.38), 0xfde6ec).translate(0, 0.025, 0.69)]);
+// the ribbon that ties it: bands up the sides, strips over the lid, and a bow pulled out of the knot
+const RIBBON = 0xc4506d;
+const bandGeo = merge([part(new THREE.BoxGeometry(0.15, 1, 0.025), RIBBON).translate(0, 0.5, 0)]);
+const stripGeo = merge([part(new THREE.BoxGeometry(1.4, 0.02, 0.15), RIBBON)]);
+const loopGeo = merge([part(new THREE.TorusGeometry(0.15, 0.035, 6, 16).scale(1.25, 0.72, 2.4), 0xd65f7c).translate(0.19, 0, 0)]);
+const knotGeo = merge([part(new THREE.SphereGeometry(0.085, 10, 8), RIBBON)]);
+const tailGeo = merge([part(new THREE.BoxGeometry(0.36, 0.02, 0.11), 0xd65f7c).translate(0.18, 0, 0)]);
+
+// powerup tokens: 1 whisk, 2 mixing bowl, 3 rainbow cake
+const tokenGeo = [null,
+  (() => {
+    const parts = [part(new THREE.CylinderGeometry(0.04, 0.05, 0.44, 8).rotateZ(Math.PI / 2), 0xc4506d).translate(-0.27, 0, 0),
+      part(new THREE.SphereGeometry(0.06, 8, 6), 0xc4506d).translate(-0.5, 0, 0)];
+    [0, 1, 2].forEach((k) => parts.push(part(new THREE.TorusGeometry(0.16, 0.017, 5, 20).scale(1.55, 1, 1).rotateX(k * Math.PI / 3), 0xf4f8fb).translate(0.2, 0, 0)));
+    parts.forEach((g) => { g.rotateZ(0.5); g.rotateY(0.7); g.scale(1.25, 1.25, 1.25); g.translate(0.02, 0.3, 0); });
+    return merge(parts);
+  })(),
+  (() => {
+    const parts = [
+      part(new THREE.CylinderGeometry(0.4, 0.24, 0.27, 24), 0xeef4f8).translate(0, 0.135, 0),
+      part(new THREE.TorusGeometry(0.4, 0.028, 6, 24).rotateX(Math.PI / 2), 0xffffff).translate(0, 0.27, 0),
+      part(new THREE.CylinderGeometry(0.37, 0.37, 0.02, 24), 0xff9ec8).translate(0, 0.275, 0),
+      part(new THREE.TorusGeometry(0.19, 0.04, 6, 18, 4.6).rotateX(Math.PI / 2), 0xfff3f8).translate(0, 0.295, 0),
+      part(new THREE.ConeGeometry(0.08, 0.13, 8), 0xfff3f8).translate(0, 0.34, 0),
+      part(new THREE.CylinderGeometry(0.02, 0.02, 0.5, 6).rotateZ(-0.6), 0xc4506d).translate(0.2, 0.42, -0.05),
+    ];
+    return merge(parts);
+  })(),
+  (() => {
+    const parts = [];
+    [0xe8445a, 0xf59a3c, 0xf7d748, 0x5cbf6a, 0x4a8fe0, 0x9a5fd0].forEach((c, k) => parts.push(part(new THREE.CylinderGeometry(0.33, 0.33, 0.065, 24), c).translate(0, 0.0325 + k * 0.065, 0)));
+    parts.push(part(new THREE.CylinderGeometry(0.345, 0.345, 0.035, 24), 0xfffaf6).translate(0, 0.41, 0));
+    parts.push(part(new THREE.SphereGeometry(0.075, 8, 6), 0xe0263f).translate(0, 0.48, 0));
+    [0, 1, 2, 3, 4].forEach((k) => parts.push(part(new THREE.SphereGeometry(0.045, 6, 4), SPRINKLES[k]).translate(Math.cos(k * 1.257) * 0.22, 0.44, Math.sin(k * 1.257) * 0.22)));
+    return merge(parts);
+  })(),
+];
+const PW_NAME = [null, 'Whisk', 'Mixing bowl', 'Rainbow cake'];
+const PW_TIP = [null, 'Play a plate on it to sweep that flavor in from its row and column.', 'Play a plate on it to sort every plate around it by flavor.', 'Play a plate on it to call that flavor in from the whole board.'];
+const PW_GLOW = [0, 0xffc233, 0x52c7e8, 0xfff3c4];
+const tokenGlowGeo = new THREE.PlaneGeometry(1.75, 1.75).rotateX(-Math.PI / 2);
+const tokenGlowMat = PW_GLOW.map((c) => new THREE.MeshBasicMaterial({ map: glowTex, color: c, transparent: true, opacity: 0.95, depthWrite: false }));
+const previewMat = new THREE.MeshBasicMaterial({ color: 0x1fa3c9, transparent: true, opacity: 0.95, depthWrite: false });
 
 // ---------- frame loop: renders only while something moves ----------
-let raf = 0, dragging = false, renders = 0;
+let raf = 0, dragging = false, renders = 0, lastNow = 0, CHAIN = 1;
 const tweens = [];
 function kick() { if (!raf) raf = requestAnimationFrame(frame); }
 function frame(now) {
@@ -1172,13 +1451,16 @@ function frame(now) {
     tw.step(tw.ease ? tw.ease(p) : p, p);
     if (p >= 1) { tweens.splice(i, 1); tw.done && tw.done(); }
   }
+  stepFx(lastNow ? Math.min(0.05, (now - lastNow) / 1000) : 0.016); lastNow = now;
   renderer.render(scene, camera); renders++;
-  if (tweens.length || dragging) kick();
+  if (tweens.length || dragging || fx.alive) kick(); else lastNow = 0;
 }
 const easeOut = (t) => 1 - Math.pow(1 - t, 3);
 const easeInOut = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const easeOutBack = (t) => 1 + 2.70158 * Math.pow(t - 1, 3) + 1.70158 * Math.pow(t - 1, 2);
+const wait = (ms) => (ms > 0 ? tween(ms, () => {}) : Promise.resolve());
 function tween(dur, step, ease, done) {
-  return new Promise((res) => { tweens.push({ dur: Math.max(1, dur * SPEED), step, ease, done: () => { done && done(); res(); } }); kick(); });
+  return new Promise((res) => { tweens.push({ dur: Math.max(1, dur * SPEED * CHAIN), step, ease, done: () => { done && done(); res(); } }); kick(); });
 }
 
 // Frames the board and the counter plates: finds the closest camera that keeps every key
@@ -1240,6 +1522,7 @@ const platePool = [];
 
 function newSlice(f) {
   const mesh = pool[f].pop() || new THREE.Mesh(sliceGeo[level.palette[f]], cakeMat);
+  mesh.castShadow = true; mesh.receiveShadow = true;
   mesh.geometry = sliceGeo[level.palette[f]];
   mesh.position.set(0, 0, 0); mesh.rotation.set(0, 0, 0); mesh.scale.set(1, 1, 1);
   const id = nextId++; slices.set(id, { mesh, f }); return id;
@@ -1251,11 +1534,11 @@ function freeSlice(id) {
 }
 function newPlateGroup() {
   const g = platePool.pop() || (() => {
-    const g = new THREE.Group(); g.add(new THREE.Mesh(plateGeo, plateMat));
+    const g = new THREE.Group(); const pm = new THREE.Mesh(plateGeo, plateMat); pm.castShadow = true; pm.receiveShadow = true; g.add(pm);
     const sh = new THREE.Mesh(plateShadowGeo, plateShadowMat); sh.position.set(0.06, -0.02, 0.08); sh.renderOrder = -1; g.add(sh);
     return g;
   })();
-  g.position.set(0, 0, 0); g.rotation.set(0, 0, 0); g.scale.set(1, 1, 1); g.visible = true; g.children[1].visible = true;
+  g.position.set(0, 0, 0); g.rotation.set(0, 0, 0); g.scale.set(1, 1, 1); g.visible = true; g.children[0].visible = true; g.children[1].visible = true; g.userData.bump = 0;
   scene.add(g); return g;
 }
 function freePlateGroup(g) {
@@ -1268,21 +1551,42 @@ function regroup(ids) {
   ids.forEach((id) => { const f = slices.get(id).f; if (!order.includes(f)) order.push(f); });
   return order.flatMap((f) => ids.filter((id) => slices.get(id).f === f));
 }
+// a quick squash, for a plate that just caught something
+let bumpId = 0;
+function bump(g, k) {
+  if (reduceMotion) return;
+  const id = g.userData.bump = ++bumpId;
+  tween(170, (t) => { if (g.userData.bump !== id) return; const w = Math.sin(Math.PI * t); g.scale.set(1 + k * w, 1 - k * 1.4 * w, 1 + k * w); },
+    null, () => { if (g.userData.bump === id) g.scale.set(1, 1, 1); });
+}
+// Slices travel together: one short hop to their seats. Where they land, the plate gives a
+// little, crumbs fly and the slice squashes; none of that holds the move up.
+function landed(plate, m, f, toRot) {
+  const g = plate.group, a = toRot + Math.PI / 6;
+  emit(new THREE.Vector3(g.position.x + Math.cos(a) * 0.3, g.position.y + 0.45, g.position.z - Math.sin(a) * 0.3), 4, [FLAVORS[level.palette[f]].swatch, 0xfffaf2], 0.9, 1.7);
+  bump(g, 0.05);
+  tween(170, (t) => { const w = Math.sin(Math.PI * t); m.scale.set(1 + 0.1 * w, 1 - 0.24 * w, 1 + 0.1 * w); }, null, () => m.scale.set(1, 1, 1));
+}
 function seat(plate, animate) {
   plate.ids = regroup(plate.ids);
   const jobs = [];
   plate.ids.forEach((id, slot) => {
-    const m = slices.get(id).mesh;
+    const sl = slices.get(id), m = sl.mesh;
     if (m.parent !== plate.group) plate.group.attach(m);
     const toRot = slot * Math.PI / 3;
-    if (!animate) { m.position.set(0, 0, 0); m.rotation.set(0, toRot, 0); return; }
-    const p0 = m.position.clone(), r0 = m.rotation.y;
+    if (!animate) { m.position.set(0, 0, 0); m.rotation.set(0, toRot, 0); m.scale.set(1, 1, 1); return; }
+    const p0 = m.position.clone(), r0 = m.rotation.y, rx0 = m.rotation.x, rz0 = m.rotation.z;
     let dr = toRot - r0; dr = Math.atan2(Math.sin(dr), Math.cos(dr));
-    const hop = p0.length() > 0.05 ? 0.75 : 0;
+    const flies = p0.length() > 0.05, hop = flies ? 0.75 : 0;
     jobs.push(tween(300, (t) => {
-      m.position.set(p0.x * (1 - t), p0.y * (1 - t) + Math.sin(Math.PI * t) * hop, p0.z * (1 - t));
-      m.rotation.set(m.rotation.x * (1 - t), r0 + dr * t, m.rotation.z * (1 - t));
-    }, easeInOut));
+      const up = Math.sin(Math.PI * t);
+      m.position.set(p0.x * (1 - t), p0.y * (1 - t) + up * hop, p0.z * (1 - t));
+      m.rotation.set(rx0 * (1 - t), r0 + dr * t, rz0 * (1 - t));
+      if (flies && !reduceMotion) m.scale.set(1, 1 + 0.14 * up, 1);
+    }, easeInOut, () => {
+      m.position.set(0, 0, 0); m.rotation.set(0, toRot, 0); m.scale.set(1, 1, 1);
+      if (flies && !reduceMotion) landed(plate, m, sl.f, toRot);
+    }));
   });
   return Promise.all(jobs);
 }
@@ -1296,6 +1600,8 @@ function clearView() {
   cellPlates.forEach((p) => { if (p) { p.ids.forEach(freeSlice); freePlateGroup(p.group); } });
   Object.values(trayPlates).forEach((p) => { p.ids.forEach(freeSlice); freePlateGroup(p.group); });
   cellPlates = new Array(level.cols * level.rows).fill(null); trayPlates = {};
+  Object.values(tokens).forEach((g) => scene.remove(g)); tokens = {};
+  showPowerPreview(-1, -1);
 }
 // draws the whole view from engine state, no animation
 function rebuildView() {
@@ -1307,6 +1613,7 @@ function rebuildView() {
     plate.group.position.copy(cellPos(c));
     cellPlates[c] = plate;
   }
+  for (let c = 0; c < level.cols * level.rows; c++) if (S.pw && S.pw[c]) spawnToken(c, S.pw[c], false);
   layTray(false);
   updateHud();
   kick();
@@ -1323,11 +1630,51 @@ function layTray(animateIn) {
     const to = trayPos(slot);
     trayPlates[qi] = plate;
     if (animateIn) {
-      plate.group.position.set(to.x + 6, to.y, to.z);
-      jobs.push(tween(380 + slot * 90, (t) => { plate.group.position.x = to.x + 6 * (1 - t); }, easeOut));
+      const pg = plate.group; pg.position.set(to.x + 6, to.y, to.z);
+      jobs.push(tween(380 + slot * 90, (t) => { const e = reduceMotion ? easeOut(t) : easeOutBack(t); pg.position.x = to.x + 6 * (1 - e); pg.rotation.y = (1 - easeOut(t)) * -2.2; }, null, () => { pg.rotation.y = 0; }));
     } else plate.group.position.copy(to);
   });
   return Promise.all(jobs);
+}
+
+let tokens = {};          // cell -> the powerup model sitting on that tile
+function spawnToken(c, type, animate, from) {
+  const g = new THREE.Group(), p = cellPos(c);
+  const glow = new THREE.Mesh(tokenGlowGeo, tokenGlowMat[type]); glow.position.y = 0.03; g.add(glow);
+  const tm = new THREE.Mesh(tokenGeo[type], cakeMat); tm.castShadow = true; g.add(tm);
+  g.position.set(p.x, 0.03, p.z); scene.add(g); tokens[c] = g;
+  if (!animate) return;
+  g.scale.setScalar(0.01);
+  // earned from a tied box, it tumbles out from under the box as that lifts away
+  if (from) g.position.copy(from);
+  tween(from ? 520 : 460, from ? (t) => {
+    g.scale.setScalar(Math.max(0.01, easeOutBack(Math.min(1, t * 1.6))));
+    g.position.set(from.x + (p.x - from.x) * t, from.y + (0.03 - from.y) * t * t + Math.sin(Math.PI * t) * 0.6, from.z + (p.z - from.z) * t);
+    g.rotation.set((1 - t) * 6, (1 - t) * 5, 0);
+  } : (t) => { g.scale.setScalar(Math.max(0.01, easeOutBack(t))); g.position.y = 0.03 + (1 - t) * (1 - t) * 1.4; g.rotation.y = (1 - t) * 5; }, null,
+    () => { g.scale.setScalar(1); g.rotation.set(0, 0, 0); g.position.set(p.x, 0.03, p.z); emit(new THREE.Vector3(p.x, 0.4, p.z), 14, [PW_GLOW[type], 0xffffff, 0xffd166], 1.4, 2.6); burst(p, PW_GLOW[type], 2.2); });
+  [784, 988, 1175].forEach((fr, i) => setTimeout(() => pop(fr), 60 + i * 80));
+  toast(PW_NAME[type] + ' earned. ' + PW_TIP[type], 3400);
+}
+// rings on the plates a powerup would reach, shown while a plate is held over its tile
+const previewRings = []; let previewKey = '';
+function showPowerPreview(cell, qi) {
+  const key = cell + ':' + qi; if (key === previewKey) return; previewKey = key;
+  previewRings.forEach((r) => { r.visible = false; });
+  if (cell < 0 || !level || !S.pw || !S.pw[cell]) return;
+  const F = level.F, type = S.pw[cell], f0 = E.mainFlavor(level.queue[qi], F, 0);
+  let i = 0;
+  for (const c of E.powerCells(level, type, cell)) {
+    if (!(type === E.PW_MIXER ? E.tot(S.b, F, c) > 0 : S.b[c * F + f0] > 0)) continue;
+    let r = previewRings[i];
+    if (!r) { r = previewRings[i] = new THREE.Mesh(hintRing.geometry, previewMat); r.rotation.x = -Math.PI / 2; scene.add(r); }
+    i++;
+    r.position.copy(cellPos(c)); r.position.y = 0.066; r.visible = true;
+  }
+}
+function vanish(g) {
+  g.userData.bump = 0;
+  tween(200, (t) => { g.scale.setScalar(Math.max(0.001, 1 - t * t)); g.rotation.y = t * 2.4; }, null, () => freePlateGroup(g));
 }
 
 // ---------- HUD ----------
@@ -1343,6 +1690,9 @@ function pieSVG(counts) {
 }
 function updateHud() {
   const n = S.cakes, total = level.totalCakes;
+  if (hudCakes !== null && n > hudCakes) { const el = $('cakeCount'); el.classList.remove('bumpy'); void el.offsetWidth; el.classList.add('bumpy'); }
+  hudCakes = n;
+  $('boxIco').hidden = !!level.scored;
   if (level.endless) {
     const nf = E.endlessFlavors(n), per = E.CAKES_PER_FLAVOR;
     $('cakeCount').textContent = n;
@@ -1376,7 +1726,15 @@ function updateHud() {
   $('leftCount').textContent = left + (left === 1 ? ' plate left' : ' plates left');
   $('undoBtn').disabled = !undoStack.length;
 }
-let toastT = 0, lastHint = null;
+let toastT = 0, lastHint = null, hudCakes = null;
+const BOX_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="9.5" width="18" height="11.5" rx="2" fill="#ee97ad"/><rect x="2" y="6" width="20" height="5" rx="1.5" fill="#f8c3d0" stroke="#d6718b"/><rect x="10.5" y="6" width="3" height="15" fill="#c4506d"/><path d="M12 6c-2-4.2-6.2-3-5-1s3 1 5 1zm0 0c2-4.2 6.2-3 5-1s-3 1-5 1z" fill="#c4506d"/></svg>';
+// the result card stacks up one little bakery box for every cake boxed
+function showBoxes(n) {
+  const el = $('endBoxes'), k = Math.min(n, 36);
+  el.hidden = !k;
+  el.innerHTML = Array.from({ length: k }, (_, i) => '<span class="bx" style="animation-delay:' + (0.25 + i * 0.05).toFixed(2) + 's">' + BOX_SVG + '</span>').join('') + (n > k ? '<span class="muted">+' + (n - k) + '</span>' : '');
+  el.setAttribute('aria-label', n + ' boxed');
+}
 function toast(msg, ms) {
   const t = $('toast'); t.textContent = msg; t.classList.add('on');
   clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), ms || 2200);
@@ -1404,7 +1762,7 @@ self.onmessage = function (e) {
   var d = e.data, S = self.Sixths;
   if (d.type === 'level') { postMessage({ id: d.id, level: S.makeLevel(d.code) }); return; }
   var L = d.level; L.nb = S.neighbors(L.blocked, L.cols, L.rows);
-  var st = { b: Int8Array.from(d.s.b), tray: d.s.tray, next: d.s.next, cakes: d.s.cakes, pts: d.s.pts || 0 };
+  var st = { b: Int8Array.from(d.s.b), tray: d.s.tray, next: d.s.next, cakes: d.s.cakes, pts: d.s.pts || 0, pw: Int8Array.from(d.s.pw || new Array(L.cols * L.rows).fill(0)) };
   if (d.scored) { var rp = S.solvePoints(L, st, { width: 16 }); postMessage({ id: d.id, move: rp.path && rp.path.length ? rp.path[0] : null, ok: !!(rp.path && rp.path.length) }); return; }
   var r = S.solve(L, st, { width: 24, goal: L.target });
   var line = r.ok ? r.path : (d.endless ? r.best : null);
@@ -1442,7 +1800,7 @@ async function startLevel(code, n, replay) {
   level = res.level; level.nb = E.neighbors(level.blocked, level.cols, level.rows);
   campaignN = n || null;
   buildBoard(level); setFitPoints(); fit();
-  S = E.initialState(level); undoStack = []; moves = [];
+  S = E.initialState(level); undoStack = []; moves = []; hudCakes = null;
   if (replay && replay.length) {
     try {
       for (const [qi, c] of replay) {
@@ -1480,9 +1838,11 @@ async function playPlate(qi, cell) {
   moves.push([qi, cell]); remember();
   // fly the plate to its tile
   const g = plate.group, p0 = g.position.clone(), p1 = cellPos(cell);
+  showPowerPreview(-1, -1);
   await tween(240, (t) => { g.position.lerpVectors(p0, p1, t); g.position.y = p0.y * (1 - t) + p1.y * t + Math.sin(Math.PI * t) * 0.3 * (1 - t); }, easeOut);
   cellPlates[cell] = { group: g, ids: plate.ids };
-  pop(330);
+  pop(330); bump(g, 0.08);
+  emit(new THREE.Vector3(p1.x, 0.12, p1.z), 8, [0xffffff, 0xf7c6d2], 1.7, 0.9);
   await playEvents(ev);
   updateHud();
   if (S.tray.some((q) => !trayPlates[q])) await layTray(true);
@@ -1505,6 +1865,8 @@ async function playPlate(qi, cell) {
   kick();
 }
 async function playEvents(ev) {
+  const score = ev.find((e) => e.t === 'p');
+  stacking = !!score && score.made >= 2;
   for (const e of ev) {
     if (e.t === 'm') {
       const from = cellPlates[e.from], to = cellPlates[e.to];
@@ -1515,33 +1877,165 @@ async function playEvents(ev) {
       pop(520 + 40 * to.ids.length);
     } else if (e.t === 'e') {
       const p = cellPlates[e.c]; cellPlates[e.c] = null;
-      const g = p.group;
-      await tween(180, (t) => { g.scale.setScalar(1 - t); }, easeOut);
+      const g = p.group; g.userData.bump = 0;
+      await tween(180, (t) => { g.scale.setScalar(Math.max(0.001, 1 - t)); g.rotation.y = t * 1.6; }, easeOut);
       freePlateGroup(g);
     } else if (e.t === 'c') {
       const p = cellPlates[e.c]; cellPlates[e.c] = null;
-      await boxCake(p, e.c);
+      await cakeOut(p.group, p.ids);
+      if (!crate) updateHud();
+    } else if (e.t === 'pw') {
+      await playPower(e);
+    } else if (e.t === 'p' && crate) {
+      // the box is tied, then lifts away; what the move earned drops out from under it
+      const cr = crate;
+      await tieCrate(cr);
+      ev.filter((x) => x.t === 't').forEach((x, i) => wait(90 + i * 140).then(() => spawnToken(x.c, x.type, true, cr.g.position.clone())));
+      score.spilled = true;
+      await leaveCrate(cr);
       updateHud();
+    } else if (e.t === 't') {
+      if (!score || !score.spilled) spawnToken(e.c, e.type, true);
     }
   }
+  stacking = false;
 }
-function boxCake(p, cell) {
-  const g = p.group, y0 = g.position.y, at = cellPos(cell);
+// One finished cake spins up and away. When a single plate finishes two or more, they go into
+// one bakery box instead: each cake spins up off its tile and drops onto the stack inside,
+// then the lid shuts, a ribbon wraps it and a bow is tied.
+let stacking = false, crate = null;
+const cakeOut = (g, ids) => (stacking ? stackCake(g, ids) : spinAway(g, ids));
+function spinAway(g, ids) {
+  g.userData.bump = 0; g.scale.set(1, 1, 1);
+  const y0 = g.position.y;
   g.children[1].visible = false;   // the plate's shadow stays behind
-  launchConfetti(new THREE.Vector3(at.x, 0.7, at.z));
-  pop(880);
-  let last = 0;
+  pop(880); burst(g.position, 0xffffff, 1.8);
+  emit(new THREE.Vector3(g.position.x, y0 + 0.7, g.position.z), 22, SPRINKLES, 1.7, 3.3);
   return tween(650, (t) => {
     const e = easeInOut(t);
-    g.rotation.y = e * Math.PI * 3;
-    g.position.y = y0 + e * 1.1;
-    g.scale.setScalar(1 - 0.9 * e * e);
-    stepConfetti(Math.max(0, Math.min(0.05, (t - last) * 0.65)), 1 - Math.max(0, (t - 0.55) / 0.45));
-    last = t;
+    g.rotation.y = e * Math.PI * 3; g.position.y = y0 + e * 1.1; g.scale.setScalar(1 - 0.9 * e * e);
+  }, null, () => { ids.forEach(freeSlice); freePlateGroup(g); });
+}
+function stackCake(g, ids) {
+  if (!crate) {
+    const cg = new THREE.Group(); cg.position.copy(g.position); scene.add(cg);
+    const box = new THREE.Mesh(boxGeo, vmat), lid = new THREE.Mesh(lidGeo, vmat);
+    box.castShadow = lid.castShadow = true;
+    box.scale.set(1, 0.01, 1); lid.position.set(0, 0, -0.69); lid.rotation.x = -2.2;
+    cg.add(box); cg.add(lid);
+    crate = { g: cg, box, lid, n: 0, top: 0.05, ids: [] };
+  }
+  const cr = crate, hold = new THREE.Group();
+  hold.position.copy(g.position); scene.add(hold);
+  let h = 0.3;
+  ids.forEach((id) => { const m = slices.get(id).mesh; hold.attach(m); m.geometry.boundingBox || m.geometry.computeBoundingBox(); h = Math.max(h, m.geometry.boundingBox.max.y); });
+  g.userData.bump = 0;
+  if (g.children[0].visible) vanish(g); else freePlateGroup(g);
+  const sc = cr.n < 3 ? 1 : 0.45, base = cr.top;   // a fourth cake and up are pressed flat to fit
+  cr.top += h * sc + 0.02; cr.ids.push(...ids);
+  const s0 = cr.box.scale.y, s1 = Math.max(1, s0, (cr.top + 0.1) / BOX_H);
+  const p0 = hold.position.clone(), q = cr.g.position, yT = q.y + base, apex = Math.max(p0.y, q.y + BOX_H * s1) + 0.85;
+  pop(700 + 90 * cr.n); burst(p0, 0xffffff, 1.8);
+  cr.n++;
+  return tween(650, (t) => {
+    const a = Math.min(1, t / 0.55), d = Math.max(0, (t - 0.55) / 0.45), k = easeInOut(Math.min(1, t / 0.7));
+    hold.rotation.y = easeInOut(t) * Math.PI * 3;
+    hold.position.set(p0.x + (q.x - p0.x) * k, d > 0 ? apex + (yT - apex) * d * d : p0.y + (apex - p0.y) * easeOut(a), p0.z + (q.z - p0.z) * k);
+    hold.scale.set(1, 1 - (1 - sc) * t, 1);
+    cr.box.scale.y = Math.max(0.01, s0 + (s1 - s0) * easeOutBack(a));
+    cr.lid.position.y = BOX_H * cr.box.scale.y;
   }, null, () => {
-    confetti.pts.visible = false;
-    p.ids.forEach(freeSlice); freePlateGroup(g);
+    cr.g.add(hold); hold.position.set(0, base, 0);
+    pop(520); bump(cr.g, 0.06);
+    emit(new THREE.Vector3(q.x, q.y + BOX_H * s1 + 0.1, q.z), 10, SPRINKLES, 1.3, 2.2);
   });
+}
+function tieCrate(cr) {
+  const H = BOX_H * cr.box.scale.y, g = cr.g, cl = (x) => Math.min(1, Math.max(0, x));
+  g.userData.bump = 0; g.scale.set(1, 1, 1);
+  const add = (geo, x, y, z, ry) => { const m = new THREE.Mesh(geo, vmat); m.position.set(x, y, z); m.rotation.y = ry || 0; m.visible = false; g.add(m); return m; };
+  const bands = [add(bandGeo, 0, 0, 0.668), add(bandGeo, 0, 0, -0.668), add(bandGeo, 0.668, 0, 0, Math.PI / 2), add(bandGeo, -0.668, 0, 0, Math.PI / 2)];
+  const strips = [add(stripGeo, 0, H + 0.062, 0), add(stripGeo, 0, H + 0.062, 0, Math.PI / 2)];
+  const loops = [add(loopGeo, 0, H + 0.12, 0), add(loopGeo, 0, H + 0.12, 0, Math.PI)];
+  const knot = add(knotGeo, 0, H + 0.12, 0);
+  const tails = [add(tailGeo, 0, H + 0.085, 0, -Math.PI / 2 + 0.42), add(tailGeo, 0, H + 0.085, 0, -Math.PI / 2 - 0.42)];
+  let shut = false, tied = false;
+  return tween(820, (t) => {
+    const a = cl(t / 0.22), b = cl((t - 0.18) / 0.24), c = cl((t - 0.38) / 0.18), d = cl((t - 0.52) / 0.34), tl = cl((t - 0.66) / 0.2), f = cl((t - 0.86) / 0.14);
+    cr.lid.rotation.x = -2.2 * (1 - easeOut(a));
+    if (a >= 1 && !shut) { shut = true; pop(880); }
+    bands.forEach((m) => { m.visible = b > 0; m.scale.y = Math.max(0.001, H * easeOut(b)); });
+    strips.forEach((m) => { m.visible = c > 0; m.scale.x = Math.max(0.001, c); });
+    loops.forEach((m) => { m.visible = d > 0; m.scale.setScalar(Math.max(0.001, easeOutBack(d))); m.rotation.z = 1.5 - 1.05 * easeOut(d); });
+    knot.visible = d > 0; knot.scale.setScalar(Math.max(0.001, easeOutBack(cl(d * 2))));
+    tails.forEach((m) => { m.visible = tl > 0; m.scale.x = Math.max(0.001, easeOut(tl)); });
+    if (f > 0 && !tied) {
+      tied = true;
+      [659, 784, 1047].forEach((fr, i) => setTimeout(() => pop(fr), i * 60));
+      emit(new THREE.Vector3(g.position.x, g.position.y + H + 0.3, g.position.z), 26, SPRINKLES, 1.7, 3.3);
+    }
+    const w = Math.sin(Math.PI * f);
+    g.scale.set(1 + 0.05 * w, 1 - 0.07 * w, 1 + 0.05 * w);
+  });
+}
+function leaveCrate(cr) {
+  const g = cr.g, x0 = g.position.x, y0 = g.position.y, z0 = g.position.z;
+  if (crate === cr) crate = null;
+  return tween(380, (c) => {
+    const e = c * c;
+    g.rotation.z = Math.sin(c * Math.PI * 2) * 0.12 * (1 - c);
+    g.position.set(x0, y0 + e * 2.4 + Math.sin(Math.PI * Math.min(1, c * 2)) * 0.12, z0 - e * 3.6);
+    g.scale.setScalar(1 - 0.88 * e);
+  }, null, () => { cr.ids.forEach(freeSlice); scene.remove(g); });
+}
+// A powerup goes off. Slices that have to leave their plates rise into a ring over the tile,
+// each full six is assembled and boxed there, and the rest drop onto the plates the engine
+// assigned them.
+async function playPower(e) {
+  const F = level.F, at = cellPos(e.c), tk = tokens[e.c];
+  delete tokens[e.c];
+  [392, 523, 659].forEach((fr, i) => setTimeout(() => pop(fr), i * 70));
+  burst(at, PW_GLOW[e.type], 3.2);
+  emit(new THREE.Vector3(at.x, 0.5, at.z), 18, [PW_GLOW[e.type], 0xffffff], 2.2, 2.8);
+  if (tk) tween(340, (t) => { tk.scale.setScalar(Math.max(0.01, t < 0.5 ? 1 + t * 1.4 : 1.7 * (1 - (t - 0.5) * 2))); tk.position.y = 0.03 + t * 1.1; tk.rotation.y = t * 7; }, null, () => scene.remove(tk));
+  // the plates it reaches answer with a ripple, nearest first
+  e.layout.forEach(([c], i) => { const p = cellPlates[c]; if (p) wait(i * 45).then(() => bump(p.group, 0.11)); });
+  await wait(260);
+  const floating = [];
+  for (const [c, counts] of e.layout) {
+    const p = cellPlates[c]; if (!p) continue;
+    const cnt = new Array(F).fill(0), keep = [];
+    for (const id of p.ids) { const f = slices.get(id).f; if (cnt[f] < counts[f]) { cnt[f]++; keep.push(id); } else floating.push(id); }
+    p.ids = keep; p.need = counts.map((k, f) => k - cnt[f]);
+  }
+  const n = floating.length, R = 0.25 + 0.05 * n;
+  await Promise.all(floating.map((id, i) => {
+    const m = slices.get(id).mesh; scene.attach(m);
+    const p0 = m.position.clone(), r0 = m.rotation.y, a = i / n * Math.PI * 2;
+    const q = new THREE.Vector3(at.x + Math.cos(a) * R, 1.15 + (i % 2) * 0.16, at.z + Math.sin(a) * R), rT = -a - Math.PI / 6 + Math.PI * 2;
+    return wait(i * 28).then(() => tween(400, (t) => {
+      m.position.lerpVectors(p0, q, t); m.position.y += Math.sin(Math.PI * t) * 0.5;
+      m.rotation.set(0, r0 + (rT - r0) * t, 0);
+    }, easeInOut));
+  }));
+  if (n) await wait(120);
+  for (const { f, n: cakes } of e.cakes) for (let k = 0; k < cakes; k++) {
+    const six = [];
+    for (let i = floating.length - 1; i >= 0 && six.length < 6; i--) if (slices.get(floating[i]).f === f) six.push(floating.splice(i, 1)[0]);
+    const g = newPlateGroup(); g.children[0].visible = false; g.children[1].visible = false; g.position.set(at.x, 0.95, at.z);
+    const cake = { group: g, ids: six };
+    await seat(cake, true);
+    await cakeOut(g, cake.ids);
+  }
+  const jobs = [];
+  for (const [c] of e.layout) {
+    const p = cellPlates[c]; if (!p) continue;
+    p.need.forEach((k, f) => { for (; k > 0; k--) { const i = floating.findIndex((id) => slices.get(id).f === f); if (i >= 0) p.ids.push(floating.splice(i, 1)[0]); } });
+    delete p.need;
+    if (p.ids.length) jobs.push(seat(p, true)); else { cellPlates[c] = null; vanish(p.group); }
+  }
+  await Promise.all(jobs);
+  floating.forEach(freeSlice);
 }
 
 // ---------- celebrations: milestones, achievements and stars (rewards only, nothing to lose) ----------
@@ -1628,7 +2122,7 @@ function finish() {
     const bk = bestKey(level.size), n = S.cakes, best = Math.max(save[bk] || 0, n), isBest = n > (save.endlessPrev || 0);
     save[bk] = best; save.current = null; persist();
     $('endTitle').textContent = 'The counter is full';
-    $('endBig').textContent = n + (n === 1 ? ' cake' : ' cakes');
+    $('endBig').textContent = n + (n === 1 ? ' cake' : ' cakes'); showBoxes(n);
     const sizeName = (SIZES.find((z) => z[0] === level.size) || SIZES[2])[1];
     $('endText').textContent = isBest ? 'That is your best run so far on the ' + sizeName + ' board.' : 'Your best run on the ' + sizeName + ' board is ' + best + ' cakes.';
     const box = $('endBtns'); box.innerHTML = '';
@@ -1645,7 +2139,7 @@ function finish() {
     }
     save.current = null; persist();
     $('endTitle').textContent = got === 3 ? 'Three stars' : got === 2 ? 'Two stars' : got === 1 ? 'One star' : 'Not quite';
-    $('endBig').textContent = fmt(p) + ' ' + starStr(got, 3);
+    $('endBig').textContent = fmt(p) + ' ' + starStr(got, 3); showBoxes(0);
     $('endText').textContent = 'The stars are at ' + st.map(fmt).join(', ') + ' points.' +
       (got === 3 ? ' You got every one.' : passed ? ' Two or three cakes from one plate is where the big points are.' : ' You need ' + fmt(st[0]) + ' to pass. Undo a few plates or start again.');
     const sb = [];
@@ -1665,7 +2159,7 @@ function finish() {
   }
   save.current = null; persist();
   $('endTitle').textContent = perfect ? 'Perfect counter' : passed ? 'Order filled' : (S.tray.length ? 'No room left' : 'Out of plates');
-  $('endBig').textContent = n + ' / ' + level.target;
+  $('endBig').textContent = n + ' / ' + level.target; showBoxes(n);
   $('endText').textContent = perfect ? 'Every slice found its cake.'
     : passed ? `You boxed ${n} of the ${total} cakes in this level. Box every one for a second star.`
     : `The order needed ${level.target}. This board can be cleared, so undo a few plates or start again.`;
@@ -1754,11 +2248,12 @@ el.addEventListener('pointermove', (ev) => {
   drag.cell = free(c) ? c : -1;
   hover.visible = drag.cell >= 0;
   if (hover.visible) { hover.position.copy(cellPos(drag.cell)); hover.position.y = 0.06; }
+  showPowerPreview(drag.cell, drag.qi);
   kick();
 });
 function endDrag(ev) {
   if (!drag) return;
-  const d = drag; drag = null; dragging = false; hover.visible = false;
+  const d = drag; drag = null; dragging = false; hover.visible = false; showPowerPreview(-1, -1);
   const plate = trayPlates[d.qi];
   if (!d.moved) {
     // a tap selects the plate; tap it again to put it back
@@ -1802,7 +2297,7 @@ $('hintBtn').onclick = async () => {
   const goal = level.endless ? S.cakes + 1 : level.target;
   const r = await ask({ type: 'hint', endless: !!level.endless, scored: !!level.scored,
     level: { queue: level.queue.slice(), blocked: level.blocked, cols: level.cols, rows: level.rows, F: level.F, target: goal, totalCakes: level.endless ? 1e9 : level.totalCakes },
-    s: { b: Array.from(S.b), tray: S.tray, next: S.next, cakes: S.cakes, pts: S.pts || 0 } });
+    s: { b: Array.from(S.b), tray: S.tray, next: S.next, cakes: S.cakes, pts: S.pts || 0, pw: Array.from(S.pw) } });
   $('hintBtn').disabled = false;
   if (!r.ok || !r.move) { toast(level.endless ? "No safe spot found. Undo a plate or two." : (level.scored ? 'No plate left to place.' : "From here the order can't be filled. Undo a plate or two."), 3000); return; }
   const [qi, c] = r.move; lastHint = r.move;
@@ -1874,6 +2369,7 @@ function openMenu() {
     sb.appendChild(b);
   });
   $('soundBtn').textContent = 'Sound: ' + (save.sound ? 'on' : 'off');
+  $('paceBtn').textContent = motionLabel();
   $('saveOut').value = ''; showSaveWhere();
   $('menu').hidden = false;
 }
@@ -1887,6 +2383,11 @@ $('saveCopy').onclick = async () => {
   toast(ok ? 'Save code copied' : 'Press and hold the code to copy it', 2400);
 };
 $('soundBtn').onclick = () => { save.sound = !save.sound; persist(); $('soundBtn').textContent = 'Sound: ' + (save.sound ? 'on' : 'off'); };
+$('paceBtn').onclick = () => {
+  save.reduce = !reduceMotion; applyPace(); persist();
+  $('paceBtn').textContent = motionLabel();
+  toast(reduceMotion ? 'Reduced motion: pieces move quickly and plainly' : 'Animated', 2200);
+};
 $('codeGo').onclick = () => {
   const sc = readSaveCode($('codeIn').value);
   if (sc) {
@@ -1918,12 +2419,42 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) kick
 window.SixthsDebug = {
   renders: () => renders,
   busy: () => busy,
+  rig: (k) => {   // test aid: lay out a board where the first counter plate finishes k cakes at once
+    const F = level.F, free = E.emptyCells(level, S);
+    for (const c of free) {
+      const nb = level.nb[c].filter((x) => free.includes(x));
+      if (nb.length < k) continue;
+      nb.slice(0, k).forEach((x) => { for (let f = 0; f < F; f++) S.b[x * F + f] = f === 0 ? 5 : 0; });
+      const q = level.queue[S.tray[0]]; for (let f = 0; f < F; f++) q[f] = f === 0 ? k : 0;
+      rebuildView(); return [S.tray[0], c];
+    }
+    return null;
+  },
+  findDouble: (depth) => {   // test aid: a short line of moves from here that ends in a plate finishing two cakes
+    let layer = [{ s: E.cloneState(S), path: [] }];
+    for (let d = 0; d < (depth || 4); d++) {
+      const next = [];
+      for (const n of layer) for (const qi of n.s.tray) for (const c of E.emptyCells(level, n.s)) {
+        const s2 = E.cloneState(n.s), b = s2.cakes; E.place(level, s2, qi, c, false);
+        const path = n.path.concat([[qi, c]]);
+        if (s2.cakes - b >= 2) return path;
+        if (next.length < 4000) next.push({ s: s2, path });
+      }
+      layer = next;
+    }
+    return null;
+  },
+  doubles: () => { const s = E.cloneState(S), out = []; (level.solution || []).slice(moves.length).forEach((m, i) => { const b = s.cakes; E.place(level, s, m[0], m[1], false); if (s.cakes - b >= 2) out.push([moves.length + i, s.cakes - b]); }); return out; },
   stars: () => level.stars || null,
   celebrating: () => celebOn,
   state: () => ({ pts: S.pts || 0, scored: !!level.scored, endless: !!level.endless, flavors: level.endless ? E.endlessFlavors(S.cakes) : level.F, cakes: S.cakes, tray: S.tray.slice(), next: S.next, target: level.target, total: level.totalCakes, ended }),
   solution: () => level.solution,
   hintMove: () => lastHint,
   timeScale: (k) => { SPEED = k; },
+  frame: (t) => frame(t),
+  power: () => Array.from(S.pw),
+  setPower: (c, type) => { S.pw[c] = type; rebuildView(); },
+  play: (qi, c) => playPlate(qi, c),
   // lays out every dessert on the board for a visual check (endless runs know all eight)
   showcase: () => {
     clearView();
