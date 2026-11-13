@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Boo-Cake</title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Boo-Cake"><meta name="theme-color" content="#f9bdd3"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset="utf-8"><title>Boo-Cake</title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Boo-Cake"><meta name="theme-color" content="#efe4dc"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -6,18 +6,21 @@
 <style>
 /* Layout: one screen. Slim HUD on top, the 3D counter in the middle, the next-plates strip at the bottom. */
 :root{
-  --bg:#f9bdd3;        /* candy-shop pink */
-  --ink:#5a1f33;       /* maroon text */
-  --ink-2:#9a4560;
-  --panel:#fff6fa;
-  --rose:#ff4f8b;      /* raspberry accent */
-  --rose-deep:#d81f63;
-  --line:#f2a3c0;
+  --bg:#efe4dc;        /* warm cream, matching the marble counter */
+  --ink:#3b2a3a;       /* plum-brown text */
+  --ink-2:#7a6577;
+  --panel:#fffaf6;     /* icing white */
+  --rose:#e9839c;      /* raspberry accent */      /* raspberry accent */
+  --rose-deep:#c4506d;
+  --bar2:#f3a76b; --muted:#7a6577; --vig:rgba(120,70,90,.17);
+  --line:#ecd9dc;
   --good:#1f9d5c;
   --f-display:"Bagel Fat One", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
   --f-body:"Figtree", -apple-system, "Segoe UI", system-ui, sans-serif;
   color-scheme: light;
 }
+/* the optional candy look: pink panels, maroon text; the scene's colors are set in the script */
+:root[data-look="candy"]{--bg:#f9bdd3;--ink:#5a1f33;--ink-2:#9a4560;--panel:#fff6fa;--rose:#ff4f8b;--rose-deep:#d81f63;--line:#f2a3c0;--bar2:#ffd21a;--muted:#8a4a60;--vig:rgba(40,90,120,.14)}
 [hidden]{display:none!important}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;overflow:hidden;
@@ -35,7 +38,7 @@ button:focus-visible{outline:3px solid var(--rose-deep);outline-offset:2px}
 .order .row strong{color:var(--ink);font-variant-numeric:tabular-nums;font-size:14px}
 .bar{height:12px;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--line),inset 0 2px 3px rgba(120,70,90,.12);overflow:hidden;position:relative}
 .bar i{position:absolute;inset:0 auto 0 0;width:0;border-radius:8px;transition:width .45s cubic-bezier(.3,1.4,.5,1);
-  background:repeating-linear-gradient(115deg,rgba(255,255,255,.28) 0 7px,transparent 7px 14px),linear-gradient(90deg,#ff4f8b,#ffd21a);
+  background:repeating-linear-gradient(115deg,rgba(255,255,255,.28) 0 7px,transparent 7px 14px),linear-gradient(90deg,var(--rose),var(--bar2));
   box-shadow:inset 0 -2px 0 rgba(150,60,80,.18),inset 0 2px 0 rgba(255,255,255,.35)}
 .bar em{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.35}
 .icon{width:44px;height:44px;border-radius:50%;border:0;background:#fff;display:grid;place-items:center;transition:transform .12s;
@@ -68,7 +71,7 @@ button:focus-visible{outline:3px solid var(--rose-deep);outline-offset:2px}
 .card h2{font-family:var(--f-display);font-weight:400;font-size:28px;margin:0;text-wrap:balance;line-height:1.05}
 .card h3{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
 .card p{margin:0;line-height:1.45;color:var(--ink)}
-.card .muted{color:#8a4a60;font-size:13px}
+.card .muted{color:var(--muted);font-size:13px}
 .btns{display:flex;gap:10px;flex-wrap:wrap}
 .btn{flex:1;min-height:48px;border-radius:14px;border:0;background:var(--rose);color:#fff;font-weight:800;font-size:16px;padding:0 14px;
   box-shadow:0 3px 0 var(--rose-deep)}
@@ -113,7 +116,7 @@ button:focus-visible{outline:3px solid var(--rose-deep);outline-offset:2px}
 ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;line-height:1.4}
 .big{font-family:var(--f-display);font-size:40px;line-height:1;color:var(--rose-deep)}
 #stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:radial-gradient(ellipse at 50% 46%,transparent 62%,rgba(40,90,120,.14) 100%)}
+  background:radial-gradient(ellipse at 50% 46%,transparent 62%,var(--vig) 100%)}
 .toast{z-index:17}
 .cnt{display:inline-flex;align-items:center;gap:5px}
 .bx{display:inline-grid;width:20px;height:20px;flex:0 0 auto}
@@ -164,7 +167,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
   <svg class="spot" id="spot" aria-hidden="true"></svg>
   <div class="veil" id="menu" hidden>
     <div class="card" role="dialog" aria-label="Levels">
-      <h2>Boo-Cake <small style="font:700 12px var(--f-body);color:var(--ink-2);letter-spacing:.06em">v0.3</small></h2>
+      <h2>Boo-Cake <small style="font:700 12px var(--f-body);color:var(--ink-2);letter-spacing:.06em">v0.3.1</small></h2>
       <p class="muted">Drag a plate from the counter onto the board. Matching slices slide together, and six of one flavor make a cake that goes in a box.</p>
       <h3>Powerups</h3>
       <p class="muted">A powerup lands on an empty tile and waits there. Play a plate onto it to set it off. It works on the flavor that plate has most of.</p>
@@ -175,7 +178,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
       </ul>
       <p class="muted">Hold a plate over a powerup to see which plates it reaches and how many cakes the move boxes. A powerup with nothing to do is never used up: it moves to the nearest empty tile and waits.</p>
       <h3>Cake domes</h3>
-      <p class="muted">A plate under a glass dome is stuck. Box a cake on a tile beside it and the dome lifts, and its slices join in straight away.</p>
+      <p class="muted">A plate under a glass dome is stuck. Box a cake on a tile beside it and the dome lifts, and its slices join in straight away. Domes can be switched off with the button at the bottom of this menu; the same levels are then dealt without them.</p>
       <h3>Limited plates</h3>
       <p class="muted">Fill the order before the plates run out.</p>
       <div class="grid" id="levelGrid"></div>
@@ -200,6 +203,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
         <li>Each flavor comes in whole cakes, and every level is played through by a solver before you see it.</li>
         <li>The next three plates are always shown. Undo and hints are free, and there are no ads, coins, lives or timers.</li>
       </ul>
+      <div class="btns"><button class="btn alt" id="lookBtn">Look: classic</button><button class="btn alt" id="domeBtn">Cake domes: on</button></div>
       <div class="btns"><button class="btn alt" id="paceBtn">Motion: animated</button><button class="btn alt" id="soundBtn">Sound: on</button><button class="btn" id="closeMenu">Back to the board</button></div>
     </div>
   </div>
@@ -527,7 +531,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
     return queue;
   }
 
-  function rawLevel(pc, attempt) {
+  function rawLevel(pc, attempt, noDomes) {
     const t = TIERS[pc.tier];
     const rng = makeRng('sixths:' + pc.code + ':' + attempt);
     const pal = shuffle(rng, [...Array(NFLAVORS).keys()]).slice(0, t.F).sort((a, z) => a - z);
@@ -539,7 +543,7 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
     // Cake domes: a few plates start on the board under glass, taken out of the queue so the
     // level still holds whole cakes only. Domes sit apart, each with open tiles beside it.
     const domes = [];
-    if (t.domes) {
+    if (t.domes && !noDomes) {
       const nb0 = neighbors(blocked, cols, rows);
       for (const c of pool.slice(t.blocked)) {
         if (domes.length >= t.domes || queue.length <= BATCH * 2) break;
@@ -561,10 +565,10 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
     const pc = parseCode(code);
     if (!pc) return null;
     if (pc.endless) return makeEndless(pc);
-    const width = (opts && opts.width) || 48;
-    if (pc.scored) return makeScoreLevel(pc, width);
+    const width = (opts && opts.width) || 48, noDomes = !!(opts && opts.noDomes);
+    if (pc.scored) return makeScoreLevel(pc, width, noDomes);
     for (let attempt = 0; attempt < 40; attempt++) {
-      const level = rawLevel(pc, attempt);
+      const level = rawLevel(pc, attempt, noDomes);
       const sol = solve(level, initialState(level), { width, goal: level.target });
       if (sol.ok) { level.solution = sol.path; return level; }
     }
@@ -574,9 +578,9 @@ ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;l
   // Score levels: the queue is fixed the same way, then the solver plays for points. The star
   // targets are set below the solver's own score, so the top star is always reachable.
   const STAR_SHARE = [0.45, 0.65, 0.85];
-  function makeScoreLevel(pc, width) {
+  function makeScoreLevel(pc, width, noDomes) {
     for (let attempt = 0; attempt < 40; attempt++) {
-      const level = rawLevel(pc, attempt);
+      const level = rawLevel(pc, attempt, noDomes);
       const r = solvePoints(level, initialState(level), { width });
       if (!r.path || r.pts < 400) continue;
       const round = (v) => Math.max(100, Math.floor(v / 50) * 50);
@@ -865,7 +869,7 @@ let SPEED = reduceMotion ? 0.35 : 1;
 const SKEY = 'sweet-sixths-v1';   // kept from the game's first name so saves carry over
 const RULES = 3;                  // a board saved under older settle rules is not replayed
 const CAMPAIGN = 30;
-const BLANK = () => ({ unlocked: 1, stars: {}, sound: true, current: null, endlessBest: 0, endlessBest45: 0, endlessBest34: 0, endlessPrev: 0, endlessSize: '46', hintSeen: false, domeSeen: false, reduce: null, sUnlocked: 1, sStars: {}, ach: {}, updatedAt: 0 });
+const BLANK = () => ({ unlocked: 1, stars: {}, sound: true, current: null, endlessBest: 0, endlessBest45: 0, endlessBest34: 0, endlessPrev: 0, endlessSize: '46', hintSeen: false, domeSeen: false, look: 'classic', domes: true, reduce: null, sUnlocked: 1, sStars: {}, ach: {}, updatedAt: 0 });
 const SCORE_N = 15;
 const ACH = [
   ['c10', 'Warm oven', '10 cakes in one Endless run'],
@@ -913,9 +917,11 @@ function mergeSaves(a, b) {
   out.hintSeen = !!(a.hintSeen || b.hintSeen);
   out.domeSeen = !!(a.domeSeen || b.domeSeen);
   out.sound = newer.sound !== false;
+  out.look = newer.look === 'candy' ? 'candy' : 'classic';
+  out.domes = newer.domes !== false;
   out.reduce = newer.reduce === true || newer.reduce === false ? newer.reduce : null;
   const cur = newer.current;
-  out.current = cur && cur.v === RULES && typeof cur.code === 'string' && Array.isArray(cur.moves) ? { code: cur.code, n: cur.n || null, moves: cur.moves, v: RULES } : null;
+  out.current = cur && cur.v === RULES && typeof cur.code === 'string' && Array.isArray(cur.moves) ? { code: cur.code, n: cur.n || null, moves: cur.moves, v: RULES, d: cur.d !== false } : null;
   out.updatedAt = Math.max(ta, tb);
   return out;
 }
@@ -1003,7 +1009,7 @@ async function syncSaves(onChange) {
     }
   } catch (e) { cloud = null; }
   const changed = JSON.stringify(prev) !== JSON.stringify(save);
-  synced = true; applyPace();
+  synced = true; applyPace(); applyLook();
   persist();
   if (cloud) pushCloud();
   showSaveWhere();
@@ -1067,6 +1073,20 @@ const FLAVORS = [
   { name: 'Sprinkle donut',       swatch: 0xff5fb8 },
 ];
 const css = (n) => '#' + n.toString(16).padStart(6, '0');
+// The two looks. They color everything around the cakes: page, ground, counter, tray and the
+// macarons on closed tiles. The cakes are the same in both.
+const LOOKS = {
+  classic: { page: '#efe4dc', sky: 0xeadfd3, floor: '#eadfd5', blotA: '226,204,192', blotB: '255,253,250', blotAlpha: [0.5, 0.6],
+    vein: (gold, al) => (gold ? `rgba(196,160,104,${al})` : `rgba(150,128,136,${al})`),
+    wood: ['#d2a276', '#dcae82', '#cf9d70'], grainD: '128,82,48', grainL: '255,236,206', grainW: [0.6, 2.6], edge: 0x9a6843, inlay: 0xe3bb6a,
+    tray: [0x6db3a3, 0x7cbdae, 0xb2dacf, 0x58998b], rim: [0xe3bb6a, 0xd2a654], macaron: [0xf4a9c0, 0xb9dca0, 0xc9b3ee, 0xf7dc82, 0xf6b98a] },
+  candy: { page: '#f9bdd3', sky: 0x8fdcec, floor: '#8fdcec', blotA: '255,250,235', blotB: '120,205,228', blotAlpha: [0.5, 0.45],
+    vein: (gold, al) => `rgba(255,255,255,${al * 0.6})`,
+    wood: ['#e39a3c', '#efac50', '#dc9034'], grainD: '160,84,20', grainL: '255,228,170', grainW: [1, 5], edge: 0xa85f1c, inlay: 0xfff0c0,
+    tray: [0x3d5576, 0x466186, 0x5c7aa2, 0x314663], rim: [0xff8fbc, 0xe8679c], macaron: [0xe8141f, 0x22a833, 0xb530e6, 0xffd21a, 0xff8a14] },
+};
+let look = LOOKS.classic;
+const repaints = [];   // each redraws one scene texture or material for the current look
 
 // ---------- three.js scene ----------
 const stage = document.getElementById('stage');
@@ -1076,7 +1096,7 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 stage.prepend(renderer.domElement);
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x8fdcec).convertSRGBToLinear();
+scene.background = new THREE.Color(look.sky).convertSRGBToLinear();
 const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
 scene.add(new THREE.HemisphereLight(0xffffff, 0xbfe4ff, 0.3));
 // one warm key light from the upper left, with soft shadows over the board and the counter
@@ -1312,31 +1332,30 @@ function rimTube(w, d, r, y, z, rad) {
   corner(w / 2 - r, d / 2 - r, 0); corner(-w / 2 + r, d / 2 - r, Math.PI / 2); corner(-w / 2 + r, -d / 2 + r, Math.PI); corner(w / 2 - r, -d / 2 + r, Math.PI * 1.5);
   return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true, 'catmullrom', 0.02), 200, rad, 8, true);
 }
-const MACARON = [0xe8141f, 0x22a833, 0xb530e6, 0xffd21a, 0xff8a14];
 let boardGroup = null;
 function buildBoard(level) {
   if (boardGroup) { scene.remove(boardGroup); boardGroup.children.forEach((m) => m.geometry.dispose()); }
   boardGroup = new THREE.Group();
   const W = boardW(), D = boardD(), z = boardZ();
-  // slate-blue tray with a pink edge; each open tile is a slightly lighter well, so only the cakes are loud
+  // enamel tray with a metal edge; each open tile is a paler well. Colors come from the look.
   const enamel = [
-    roundRect(W, D, 0.5, 0.3, 0x3d5576, 0.0).translate(0, -0.02, z),
-    roundRect(W - 0.26, D - 0.26, 0.4, 0.02, 0x466186, 0.0).translate(0, 0.0, z),
+    roundRect(W, D, 0.5, 0.3, look.tray[0], 0.0).translate(0, -0.02, z),
+    roundRect(W - 0.26, D - 0.26, 0.4, 0.02, look.tray[1], 0.0).translate(0, 0.0, z),
   ];
-  const brass = [part(rimTube(W - 0.04, D - 0.04, 0.48, -0.02, z, 0.06), 0xff8fbc), part(rimTube(W + 0.02, D + 0.02, 0.51, -0.3, z, 0.05), 0xe8679c)];
+  const brass = [part(rimTube(W - 0.04, D - 0.04, 0.48, -0.02, z, 0.06), look.rim[0]), part(rimTube(W + 0.02, D + 0.02, 0.51, -0.3, z, 0.05), look.rim[1])];
   const treats = [];
   for (let c = 0; c < level.cols * level.rows; c++) {
     const p = cellPos(c);
     if (level.blocked[c]) {
       // closed tile: a macaron sits on it
-      const col = MACARON[(c * 7 + level.cols) % MACARON.length];
+      const col = look.macaron[(c * 7 + level.cols) % look.macaron.length];
       enamel.push(part(new THREE.CylinderGeometry(0.42, 0.42, 0.02, 28), 0xfbf4e8).translate(p.x, 0.005, p.z));
       treats.push(part(new THREE.SphereGeometry(0.31, 20, 10).scale(1, 0.4, 1), col).translate(p.x, 0.13, p.z));
       treats.push(part(new THREE.CylinderGeometry(0.28, 0.28, 0.07, 20), 0xfffaf2).translate(p.x, 0.215, p.z));
       treats.push(part(new THREE.SphereGeometry(0.31, 20, 10).scale(1, 0.4, 1), col).translate(p.x, 0.3, p.z));
     } else {
-      enamel.push(part(new THREE.CylinderGeometry(0.6, 0.6, 0.02, 36), 0x5c7aa2).translate(p.x, 0.003, p.z));
-      enamel.push(part(new THREE.TorusGeometry(0.6, 0.03, 6, 36).rotateX(Math.PI / 2), 0x314663).translate(p.x, 0.008, p.z));
+      enamel.push(part(new THREE.CylinderGeometry(0.6, 0.6, 0.02, 36), look.tray[2]).translate(p.x, 0.003, p.z));
+      enamel.push(part(new THREE.TorusGeometry(0.6, 0.03, 6, 36).rotateX(Math.PI / 2), look.tray[3]).translate(p.x, 0.008, p.z));
     }
   }
   [[enamel, enamelMat], [brass, brassMat], [treats, cakeMat]].forEach(([parts, mat]) => {
@@ -1345,35 +1364,42 @@ function buildBoard(level) {
   });
   scene.add(boardGroup);
 }
-// the curved caramel counter that holds incoming plates, with a cream inlay line
+// the curved wooden counter that holds incoming plates, with a metal inlay line
 (function () {
   const cv = document.createElement('canvas'); cv.width = cv.height = 512;
-  const x = cv.getContext('2d'), g = x.createLinearGradient(0, 0, 512, 0);
-  g.addColorStop(0, '#e39a3c'); g.addColorStop(0.5, '#efac50'); g.addColorStop(1, '#dc9034');
+  const x = cv.getContext('2d');
+  const paint = () => {
+  const g = x.createLinearGradient(0, 0, 512, 0);
+  g.addColorStop(0, look.wood[0]); g.addColorStop(0.5, look.wood[1]); g.addColorStop(1, look.wood[2]);
   x.fillStyle = g; x.fillRect(0, 0, 512, 512);
   let seed = 977; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
   for (let i = 0; i < 90; i++) {
     const y0 = rnd() * 512, dark = rnd() < 0.5;
-    x.strokeStyle = dark ? `rgba(160,84,20,${0.08 + rnd() * 0.12})` : `rgba(255,228,170,${0.1 + rnd() * 0.14})`; x.lineWidth = 1 + rnd() * 5;
+    x.strokeStyle = dark ? `rgba(${look.grainD},${0.06 + rnd() * 0.11})` : `rgba(${look.grainL},${0.08 + rnd() * 0.12})`; x.lineWidth = look.grainW[0] + rnd() * look.grainW[1];
     x.beginPath(); x.moveTo(-10, y0);
     for (let px = 0; px <= 522; px += 58) x.lineTo(px, y0 + Math.sin(px * 0.011 + i) * 5 + (rnd() - 0.5) * 3);
     x.stroke();
   }
+  };
+  paint();
   const tex = new THREE.CanvasTexture(cv); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(2, 5); tex.encoding = THREE.sRGBEncoding;
   tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   const arc = [Math.PI * 0.72, Math.PI * 0.56];
   const top = new THREE.Mesh(new THREE.CylinderGeometry(COUNTER_R + 0.9, COUNTER_R + 0.9, 0.3, 96, 1, false, arc[0], arc[1]), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.5, envMapIntensity: 0.4 }));
   top.position.set(0, -0.18, COUNTER_Z); top.receiveShadow = true; top.castShadow = true; scene.add(top);
-  const edge = new THREE.Mesh(new THREE.CylinderGeometry(COUNTER_R + 0.98, COUNTER_R + 0.98, 0.26, 96, 1, false, arc[0], arc[1]), new THREE.MeshStandardMaterial({ color: new THREE.Color(0xa85f1c).convertSRGBToLinear(), roughness: 0.6, envMapIntensity: 0.4 }));
+  const edge = new THREE.Mesh(new THREE.CylinderGeometry(COUNTER_R + 0.98, COUNTER_R + 0.98, 0.26, 96, 1, false, arc[0], arc[1]), new THREE.MeshStandardMaterial({ color: new THREE.Color(look.edge).convertSRGBToLinear(), roughness: 0.6, envMapIntensity: 0.4 }));
   edge.position.set(0, -0.2, COUNTER_Z); edge.castShadow = true; scene.add(edge);
-  const inlay = new THREE.Mesh(part(new THREE.TorusGeometry(COUNTER_R + 0.72, 0.022, 6, 96, arc[1]).rotateX(Math.PI / 2).rotateY(Math.PI / 2 + arc[1] / 2), 0xfff0c0), brassMat);
+  const inlayMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(look.inlay).convertSRGBToLinear(), roughness: 0.28, metalness: 1, envMapIntensity: 1.25 });
+  const inlay = new THREE.Mesh(new THREE.TorusGeometry(COUNTER_R + 0.72, 0.022, 6, 96, arc[1]).rotateX(Math.PI / 2).rotateY(Math.PI / 2 + arc[1] / 2), inlayMat);
   inlay.position.set(0, -0.03, COUNTER_Z); scene.add(inlay);
+  repaints.push(() => { paint(); tex.needsUpdate = true; edge.material.color.set(look.edge).convertSRGBToLinear(); inlayMat.color.set(look.inlay).convertSRGBToLinear(); });
 })();
-// the ground: pale aqua sky with soft cream clouds, drawn once into a texture
+// the ground: marble in the classic look, pale sky with clouds in the candy look, drawn into a texture
 (function () {
   const N = 1024, cv = document.createElement('canvas'); cv.width = cv.height = N;
   const x = cv.getContext('2d');
-  x.fillStyle = '#8fdcec'; x.fillRect(0, 0, N, N);
+  const paint = () => {
+  x.fillStyle = look.floor; x.fillRect(0, 0, N, N);
   let seed = 4242; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
   // clouds: warm and cool blotches, drawn wrapped so the texture tiles without a seam
   const wrap = (fn) => { for (const dx of [-N, 0, N]) for (const dy of [-N, 0, N]) { x.save(); x.translate(dx, dy); fn(); x.restore(); } };
@@ -1381,7 +1407,7 @@ function buildBoard(level) {
     const cx = rnd() * N, cy = rnd() * N, r = 90 + rnd() * 220, warm = rnd() < 0.6;
     wrap(() => {
       const g = x.createRadialGradient(cx, cy, 0, cx, cy, r);
-      g.addColorStop(0, warm ? 'rgba(255,250,235,0.5)' : 'rgba(120,205,228,0.45)'); g.addColorStop(1, warm ? 'rgba(255,250,235,0)' : 'rgba(120,205,228,0)');
+      g.addColorStop(0, warm ? `rgba(${look.blotA},${look.blotAlpha[0]})` : `rgba(${look.blotB},${look.blotAlpha[1]})`); g.addColorStop(1, warm ? `rgba(${look.blotA},0)` : `rgba(${look.blotB},0)`);
       x.fillStyle = g; x.fillRect(cx - r, cy - r, r * 2, r * 2);
     });
   }
@@ -1392,14 +1418,17 @@ function buildBoard(level) {
     while (py < N + 40) { pts.push([px, py]); px += drift * 60 + (rnd() - 0.5) * 150; py += 50 + rnd() * 90; }
     wrap(() => {
       for (const [lw, al] of [[w * 9, 0.03], [w, gold ? 0.26 : 0.13]]) {
-        x.strokeStyle = `rgba(255,255,255,${al * 0.6})`; x.lineWidth = lw; x.lineCap = 'round';
+        x.strokeStyle = look.vein(gold, al); x.lineWidth = lw; x.lineCap = 'round';
         x.beginPath(); x.moveTo(pts[0][0], pts[0][1]);
         for (let k = 1; k < pts.length; k++) { const a = pts[k - 1], b = pts[k]; x.quadraticCurveTo(a[0], a[1], (a[0] + b[0]) / 2, (a[1] + b[1]) / 2); }
         x.stroke();
       }
     });
   }
+  };
+  paint();
   const tex = new THREE.CanvasTexture(cv);
+  repaints.push(() => { paint(); tex.needsUpdate = true; });
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(3, 3); tex.encoding = THREE.sRGBEncoding;
   tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   const m = new THREE.Mesh(new THREE.PlaneGeometry(36, 36), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.34, envMapIntensity: 0.22 }));
@@ -1946,7 +1975,7 @@ try {
   const src = $('engineSrc').textContent + `
 self.onmessage = function (e) {
   var d = e.data, S = self.Sixths;
-  if (d.type === 'level') { postMessage({ id: d.id, level: S.makeLevel(d.code) }); return; }
+  if (d.type === 'level') { postMessage({ id: d.id, level: S.makeLevel(d.code, { noDomes: d.noDomes }) }); return; }
   var L = d.level; L.nb = S.neighbors(L.blocked, L.cols, L.rows);
   var st = { b: Int8Array.from(d.s.b), tray: d.s.tray, next: d.s.next, cakes: d.s.cakes, pts: d.s.pts || 0, streak: d.s.streak || 0, pw: Int8Array.from(d.s.pw || new Array(L.cols * L.rows).fill(0)), lock: Int8Array.from(d.s.lock || new Array(L.cols * L.rows).fill(0)) };
   if (d.scored) { var rp = S.solvePoints(L, st, { width: 16 }); postMessage({ id: d.id, move: rp.path && rp.path.length ? rp.path[0] : null, ok: !!(rp.path && rp.path.length) }); return; }
@@ -1962,7 +1991,7 @@ function ask(msg) {
   return new Promise((res) => {
     if (worker) { const id = ++wid; waiting[id] = res; worker.postMessage(Object.assign({ id }, msg)); return; }
     setTimeout(() => {
-      if (msg.type === 'level') res({ level: E.makeLevel(msg.code) });
+      if (msg.type === 'level') res({ level: E.makeLevel(msg.code, { noDomes: msg.noDomes }) });
       else {
         const L = msg.level; L.nb = E.neighbors(L.blocked, L.cols, L.rows);
         if (msg.scored) { const rp = E.solvePoints(L, E.cloneState(S), { width: 16 }); res({ ok: !!(rp.path && rp.path.length), move: rp.path && rp.path.length ? rp.path[0] : null }); return; }
@@ -1980,7 +2009,7 @@ async function startLevel(code, n, replay) {
   const tok = ++loadToken;
   busy = true; ended = false; filledShown = false;
   $('loading').hidden = false; $('endCard').hidden = true; hideHint();
-  const res = await ask({ type: 'level', code });
+  const res = await ask({ type: 'level', code, noDomes: save.domes === false });
   if (tok !== loadToken) return;
   if (!res.level) { $('loading').textContent = 'That level code did not build. Try another.'; busy = false; return; }
   level = res.level; level.nb = E.neighbors(level.blocked, level.cols, level.rows);
@@ -2009,7 +2038,7 @@ async function startLevel(code, n, replay) {
   if (E.isOver(level, S)) finish();
 }
 function snap() { return { s: E.cloneState(S), m: moves.length, q: level.queue.length, d: level.dealt || 0 }; }
-function remember() { save.current = { code: level.code, n: campaignN, moves, v: RULES }; persist(); }
+function remember() { save.current = { code: level.code, n: campaignN, moves, v: RULES, d: save.domes !== false }; persist(); }
 
 // ---------- playing a plate ----------
 async function playPlate(qi, cell) {
@@ -2563,6 +2592,8 @@ function openMenu() {
   });
   $('soundBtn').textContent = 'Sound: ' + (save.sound ? 'on' : 'off');
   $('paceBtn').textContent = motionLabel();
+  $('lookBtn').textContent = 'Look: ' + (save.look === 'candy' ? 'candy' : 'classic');
+  $('domeBtn').textContent = 'Cake domes: ' + (save.domes === false ? 'off' : 'on');
   $('saveOut').value = ''; showSaveWhere();
   $('menu').hidden = false;
 }
@@ -2607,6 +2638,29 @@ $('codeGo').onclick = () => {
   $('menu').hidden = true; startLevel(pc.code, null);
 };
 document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
+
+// ---------- look: classic or candy, for everything but the cakes ----------
+function applyLook() {
+  const name = save.look === 'candy' ? 'candy' : 'classic';
+  if (look === LOOKS[name] && document.documentElement.dataset.look === name) return;
+  look = LOOKS[name];
+  document.documentElement.dataset.look = name;
+  const meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.content = look.page;
+  scene.background = new THREE.Color(look.sky).convertSRGBToLinear();
+  repaints.forEach((fn) => fn());
+  if (level) buildBoard(level);
+  kick();
+}
+$('lookBtn').onclick = () => { save.look = save.look === 'candy' ? 'classic' : 'candy'; persist(); applyLook(); $('lookBtn').textContent = 'Look: ' + save.look; };
+$('domeBtn').onclick = () => {
+  save.domes = save.domes === false; persist();
+  $('domeBtn').textContent = 'Cake domes: ' + (save.domes ? 'on' : 'off');
+  if (level && !level.endless) {
+    const had = level.domes && level.domes.length;
+    if (save.domes || had) { $('menu').hidden = true; startLevel(level.code, campaignN); toast(save.domes ? 'Cake domes on. This level starts again.' : 'Cake domes off. This level starts again without them.', 3000); return; }
+  }
+  toast(save.domes ? 'Cake domes on, from level 10 up.' : 'Cake domes off.', 2400);
+};
 
 // ---------- test hooks (read-only helpers used by the automated check) ----------
 window.SixthsDebug = {
@@ -2670,10 +2724,12 @@ window.SixthsDebug = {
 };
 
 // ---------- boot ----------
+applyLook();
 fit();
 document.addEventListener('pointerdown', () => { touched = true; }, { capture: true });
 function bootLevel() {
-  if (save.current && save.current.code) return startLevel(save.current.code, save.current.n, save.current.moves);
+  // moves saved with domes on do not fit the same level dealt without them, and the other way round
+  if (save.current && save.current.code) return startLevel(save.current.code, save.current.n, (save.current.d !== false) === (save.domes !== false) ? save.current.moves : null);
   return startLevel(codeOf(Math.min(save.unlocked, CAMPAIGN)), Math.min(save.unlocked, CAMPAIGN));
 }
 // merge the other copies once the first board is up, so the boot's own save can't win the race

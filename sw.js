@@ -1,5 +1,5 @@
 // Boo-Cake offline cache. Bump VERSION when index.html changes so phones pick up the new build.
-const VERSION = 'boocake-v0.3';
+const VERSION = 'boocake-v0.3.1';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icon-180.png', 'icon-512.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => {
