@@ -1,12 +1,12 @@
 {
-  "name": "Sweet Sixths",
-  "short_name": "Sweet Sixths",
+  "name": "Boo-Cake",
+  "short_name": "Boo-Cake",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#efe4dc",
-  "theme_color": "#efe4dc",
+  "background_color": "#f9bdd3",
+  "theme_color": "#f9bdd3",
   "icons": [
     { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
